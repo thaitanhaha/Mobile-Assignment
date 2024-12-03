@@ -4,7 +4,7 @@ import { UpdateExpenseDto } from './dto/update-expense.dto';
 
 @Injectable()
 export class ExpensesService {
-  private expenses = [];  // Dữ liệu tạm thời, có thể thay bằng cơ sở dữ liệu.
+  private expenses = [];  //
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = { id: Date.now().toString(), ...createExpenseDto };
@@ -16,7 +16,7 @@ export class ExpensesService {
     return this.expenses.find(expense => expense.id === id);
   }
 
-  getChartData(startDate: string, endDate: string) {
+  getChartData(startDate: string, endDate: string, groupBy: string) {
     // Mock data cho biểu đồ
     return {
       startDate,
