@@ -15,7 +15,7 @@ const HeaderComponent = () => {
       {/* Right-Aligned Button and Notification Bell */}
       <View style={styles.rightSection}>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Earn $115</Text>
+          <Text style={styles.buttonText}>Get Suggestion</Text>
         </TouchableOpacity>
         <View style={styles.notificationBell}>
           <Image
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   button: {
-    backgroundColor: '#32CD32',
+    backgroundColor: '#9AEF5E',
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 20,

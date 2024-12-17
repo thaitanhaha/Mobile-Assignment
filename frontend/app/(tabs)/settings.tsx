@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginRight: 10,
     backgroundColor: '#f9f9f9',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
+    fontWeight: 'bold',
   },
   arrowButton: {
     paddingLeft: 10,
