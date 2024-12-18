@@ -1,54 +1,73 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 
+type Notification = {
+	id: string;
+	date: string;
+	header: string;
+	description: string;
+	amountPassed: string;
+};
+
+const notifications: Notification[] = [
+	{
+		id: '1', date: '18/12/2024', header: 'Profile Updated',
+		description: '',
+		amountPassed: '',
+	},
+	{ 
+		id: '2', date: '18/12/2024', header: 'Budget Limit Reached',
+		description: 'Slow down your expense bro.\nYou have passed your expense goal limit.',
+		amountPassed: '5.00 USD',
+	},
+];
+
 export default function NotificationsScreen() {
-return (
-<View style={styles.container}>
-	<HeaderComponent />
-
-	<View style={styles.notificationsContainer}>
-		<Text style={styles.notificationsTitle}>Notifications</Text>
-	</View>
-
-	<View style={styles.formContainer}>
+	const renderItem = ({ item }: { item: Notification }) => (
 		<View style={styles.inputContainer}>
-			<Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-			<View style={styles.rightContainer}>
-				<Text style={styles.inputLabel}>18/12/2024</Text>
-				<View style={styles.inputRow}>
-				<View style={styles.inputValue}>
-					<Text style={styles.notificationHeader}>Profile Updated</Text>
-				</View>
-				<TouchableOpacity style={styles.arrowButton}>
-					<Text style={styles.arrowText}>→</Text>
-				</TouchableOpacity>
-				</View>
+		  <Image
+			source={require('../../assets/images/favicon.png')}
+			style={styles.icon}
+		  />
+		  <View style={styles.rightContainer}>
+			<Text style={styles.inputLabel}>{item.date}</Text>
+			<View style={styles.inputRow}>
+			  <View style={styles.inputValue}>
+				<Text style={styles.notificationHeader}>{item.header}</Text>
+				{item.description && (
+				  <Text>
+					{item.description}
+					{'\n'}
+					AMOUNT PASSED:{' '}
+					{item.amountPassed && (
+					  <Text style={styles.amountPassed}>{item.amountPassed}</Text>
+					)}
+				  </Text>
+				)}
+			  </View>
+			  <TouchableOpacity style={styles.arrowButton}>
+				<Text style={styles.arrowText}>→</Text>
+			  </TouchableOpacity>
+			</View>
+		  </View>
+		</View>
+	);
+	return (
+		<View style={styles.container}>
+			<HeaderComponent />
+			<View style={styles.notificationsContainer}>
+				<Text style={styles.notificationsTitle}>Notifications</Text>
+			</View>
+			<View style={styles.formContainer}>
+			<FlatList
+				data={notifications}
+				renderItem={renderItem}
+				keyExtractor={(item) => item.id}
+			/>
 			</View>
 		</View>
-
-		<View style={styles.inputContainer}>
-			<Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-			<View style={styles.rightContainer}>
-				<Text style={styles.inputLabel}>18/12/2024</Text>
-				<View style={styles.inputRow}>
-				<View style={styles.inputValue}>
-					<Text style={styles.notificationHeader}>Budget Limit Reached</Text>
-					<Text>Slow down your expense bro.{"\n"}
-					You have passed your expense goal limit.{"\n"}
-					AMOUNT PASSED: <Text style={styles.amountPassed}>5.00 USD</Text>
-					</Text>
-				</View>
-				<TouchableOpacity style={styles.arrowButton}>
-					<Text style={styles.arrowText}>→</Text>
-				</TouchableOpacity>
-				</View>
-			</View>
-		</View>
-	</View>
-
-</View>
-);
+	);
 }
 
 const styles = StyleSheet.create({
