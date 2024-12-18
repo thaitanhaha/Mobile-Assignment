@@ -1,12 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 
 function EntriesTab() {
+  const entries = [
+    { id: 1, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
+    { id: 2, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 3, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 4, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 5, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
+    { id: 11, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
+    { id: 22, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 33, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 44, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
+    { id: 55, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
+  ];
+
   return (
-    <View>
-      ABC
-    </View>
+    <ScrollView style={{ paddingVertical: 8 }}>
+      {entries.map((entry) => (
+        <View key={entry.id} style={styles.inputContainer}>
+          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+          <View style={styles.rightContainer}>
+            <View style={styles.entryRow}>
+              <View style={styles.entryInfo}>
+                <Text style={styles.entryName}>{entry.name}</Text>
+                <Text style={styles.entryAmount}>{entry.amount > 0 ? '+' : ''}{entry.amount} USD</Text>
+              </View>
+              <Text>{entry.type} - {entry.date}</Text>
+            </View>
+          </View>
+        </View>
+      ))}
+    </ScrollView>
   );
 }
 
@@ -20,6 +46,22 @@ function ChartsTab() {
 
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
+  const [showCards, setShowCards] = useState(true);
+
+  const handleEntriesPress = () => {
+    if (selectedTab === 'Entries') {
+      setShowCards((prev) => !prev);
+    } else {
+      setSelectedTab('Entries');
+    }
+  };
+  const handleChartsPress = () => {
+    if (selectedTab === 'Charts') {
+      setShowCards((prev) => !prev);
+    } else {
+      setSelectedTab('Charts');
+    }
+  };
 
   let CurrentTabComponent;
   if (selectedTab === 'Entries') CurrentTabComponent = EntriesTab;
@@ -29,69 +71,91 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <HeaderComponent />
 
-      {/* Screen Content */}
-      <View style={styles.content}>
-        {/* Title */}
-        <Text style={styles.title}>Happy saving!</Text>
-
-        {/* Tabs */}
-        <View style={styles.selections}>
-          <TouchableOpacity style={styles.selection}>
-            <Text style={styles.selectionText}>All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.selection}>
-            <Text style={styles.selectionText}>Favourite</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Cards Section (Horizontal Scroll) */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.cards}>
-            <View style={[styles.card, { backgroundColor: '#BAEC97' }]}>
-              <TouchableOpacity style={{backgroundColor: 'white', height: 50, width: 50}}>
-                <Text>Button</Text>
-              </TouchableOpacity>
-              <View style={{ marginLeft: 8, marginBottom: 16 }}>
-                <Text style={styles.cardTitle}>Total</Text>
-                <Text style={styles.cardDescription}>Something...</Text>
-              </View>
-            </View>
-            <View style={[styles.card, { backgroundColor: '#E7FD72' }]}>
-              <View style={{ marginLeft: 8, marginBottom: 16 }}>
-                <Text style={styles.cardTitle}>Charts</Text>
-                <Text style={styles.cardDescription}>Something...</Text>
-              </View>
-            </View>
-            <View style={[styles.card, { backgroundColor: '#FFD700' }]}>
-              <View style={{ marginLeft: 8, marginBottom: 16 }}>
-                <Text style={styles.cardTitle}>Savings</Text>
-                <Text style={styles.cardDescription}>Something...</Text>
-              </View>
-            </View>
-            {/* Add more cards as needed */}
+      {showCards ? (
+        <View style={styles.content}>
+          <Text style={styles.title}>Happy saving!</Text>
+          <View style={styles.selections}>
+            <TouchableOpacity style={styles.selection}>
+              <Text style={styles.selectionText}>All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.selection}>
+              <Text style={styles.selectionText}>Favourite</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.cards}>
+              <View style={[styles.card, { backgroundColor: '#BAEC97' }]}>
+                <TouchableOpacity style={{ backgroundColor: 'white', height: 50, width: 50 }}>
+                  <Text>Button</Text>
+                </TouchableOpacity>
+                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                  <Text style={styles.cardTitle}>Total</Text>
+                  <Text style={styles.cardDescription}>Something...</Text>
+                </View>
+              </View>
+              <View style={[styles.card, { backgroundColor: '#E7FD72' }]}>
+                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                  <Text style={styles.cardTitle}>Charts</Text>
+                  <Text style={styles.cardDescription}>Something...</Text>
+                </View>
+              </View>
+              <View style={[styles.card, { backgroundColor: '#FFD700' }]}>
+                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                  <Text style={styles.cardTitle}>Savings</Text>
+                  <Text style={styles.cardDescription}>Something...</Text>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.inputContainer}>
+          <View style={{flex: 1, paddingHorizontal: 16,}}>
+              <View style={[styles.entryInfo, styles.totalsavings]}>
+                <Text style={{fontWeight: 'bold'}}>Total Savings</Text>
+                <Image source={require('../../assets/images/favicon.png')} />
+              </View>
+          </View>
+        </View>
+      )}
 
       <View style={styles.tabsContainer}>
         <TouchableOpacity
           style={[styles.tab, selectedTab === 'Entries' && styles.activeTab]}
-          onPress={() => setSelectedTab('Entries')}
+          onPress={handleEntriesPress}
         >
-          <Text style={[styles.tabText, selectedTab === 'Entries' && styles.activeTabText]}>Entries</Text>
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === 'Entries' && styles.activeTabText,
+            ]}
+          >
+            Entries
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, selectedTab === 'Charts' && styles.activeTab]}
-          onPress={() => setSelectedTab('Charts')}
+          onPress={handleChartsPress}
         >
-          <Text style={[styles.tabText, selectedTab === 'Charts' && styles.activeTabText]}>Charts</Text>
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === 'Charts' && styles.activeTabText,
+            ]}
+          >
+            Charts
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.contentContainer}>
+      <View
+        style={[
+          styles.contentContainer,
+          !showCards && styles.expandedContentContainer,
+        ]}
+      >
         {CurrentTabComponent && <CurrentTabComponent />}
       </View>
-
     </View>
   );
 }
@@ -131,11 +195,9 @@ const styles = StyleSheet.create({
   cards: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
   },
   card: {
-    flex: 1,
-    height: 175,
+    height: 'auto',
     width: 175,
     borderRadius: 16,
     flexDirection: 'column',
@@ -158,6 +220,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   activeTab: {
+    flex: 1,
     backgroundColor: 'white',
   },
   activeTabText: {
@@ -165,7 +228,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: 'white',
   },
   tab: {
@@ -181,4 +245,55 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#C4C9CF',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  icon: {
+    width: 30, 
+    height: 30, 
+    marginRight: 10
+  },
+  rightContainer: {
+    flex: 1,
+    paddingLeft: 8,
+  },
+  entryRow: {
+    flexDirection: 'column',
+    marginTop: 5,
+    paddingVertical: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 16,
+    backgroundColor: '#f9f9f9',
+  },
+  entryInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    fontWeight: 'bold',
+    marginBottom: 4,
+    alignItems: 'center',
+  },
+  entryName: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  entryAmount: {
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  expandedContentContainer: {
+    flex: 1,
+  },
+  totalsavings: {
+    paddingHorizontal: 20, 
+    borderRadius: 8, 
+    borderColor: 'white', 
+    backgroundColor: '#9AEF5E', 
+    flexDirection: 'row'
+  }
 });
