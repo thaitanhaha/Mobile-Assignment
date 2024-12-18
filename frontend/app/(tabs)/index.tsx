@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
+import EntriesTab from '@/components//EntriesTab';
+import ChartsTab from '@/components/ChartsTab';
 
-function EntriesTab() {
+export default function HomeScreen() {
+  const [selectedTab, setSelectedTab] = useState('Entries');
+  const [showCards, setShowCards] = useState(true);
+
   const entries = [
     { id: 1, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
     { id: 2, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
@@ -16,37 +21,7 @@ function EntriesTab() {
     { id: 55, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
   ];
 
-  return (
-    <ScrollView style={{ paddingVertical: 8 }}>
-      {entries.map((entry) => (
-        <View key={entry.id} style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <View style={styles.entryRow}>
-              <View style={styles.entryInfo}>
-                <Text style={styles.entryName}>{entry.name}</Text>
-                <Text style={styles.entryAmount}>{entry.amount > 0 ? '+' : ''}{entry.amount} USD</Text>
-              </View>
-              <Text>{entry.type} - {entry.date}</Text>
-            </View>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
-  );
-}
-
-function ChartsTab() {
-  return (
-    <View>
-      DEF
-    </View>
-  );
-}
-
-export default function HomeScreen() {
-  const [selectedTab, setSelectedTab] = useState('Entries');
-  const [showCards, setShowCards] = useState(true);
+  const chartData = [5.25, 5.42, 5.29, 5.38, 5.335];
 
   const handleEntriesPress = () => {
     if (selectedTab === 'Entries') {
@@ -63,9 +38,9 @@ export default function HomeScreen() {
     }
   };
 
-  let CurrentTabComponent;
-  if (selectedTab === 'Entries') CurrentTabComponent = EntriesTab;
-  if (selectedTab === 'Charts') CurrentTabComponent = ChartsTab;
+  let CurrentTabComponent = null;
+  if (selectedTab === 'Entries') CurrentTabComponent = <EntriesTab entries={entries} />;
+  if (selectedTab === 'Charts') CurrentTabComponent = <ChartsTab data={chartData} />;
 
   return (
     <View style={styles.container}>
@@ -154,7 +129,7 @@ export default function HomeScreen() {
           !showCards && styles.expandedContentContainer,
         ]}
       >
-        {CurrentTabComponent && <CurrentTabComponent />}
+        {CurrentTabComponent}
       </View>
     </View>
   );
@@ -290,6 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   totalsavings: {
+    marginTop: 16,
     paddingHorizontal: 20, 
     borderRadius: 8, 
     borderColor: 'white', 
