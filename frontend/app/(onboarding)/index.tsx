@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -20,37 +20,79 @@ const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
   const handleGetStarted = () => {
     router.replace('/(tabs)');
   };
+  
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleIndexChanged = (index: React.SetStateAction<number>) => {
+    setActiveIndex(index);
+  };
 
   return (
-    <Swiper style={styles.wrapper} loop={false} dot={<View style={styles.dot} />} activeDot={<View style={styles.activeDot} />}>
-      {/* Page 1 */}
-      <View style={styles.slide}>
-        <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
-        <Text style={styles.title}>Welcome to Our App</Text>
-        <Text style={styles.text}>Discover new features and enhance your productivity.</Text>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={{alignItems: 'center'}}>
+        <View style={styles.progressBarContainer}>
+          <View style={[styles.progressBar, { width: `${(activeIndex + 1) / 3 * 100}%` }]} />
+        </View>
       </View>
-      
-      {/* Page 2 */}
-      <View style={styles.slide}>
-        <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
-        <Text style={styles.title}>Stay Organized</Text>
-        <Text style={styles.text}>Keep track of your tasks and projects seamlessly.</Text>
-      </View>
-      
-      {/* Page 3 */}
-      <View style={styles.slide}>
-        <Image source={{ uri: 'https://via.placeholder.com/200' }} style={styles.image} />
-        <Text style={styles.title}>Get Started</Text>
-        <Text style={styles.text}>Join us and explore the possibilities.</Text>
-        <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
-      </View>
-    </Swiper>
+
+      <Swiper
+        style={styles.wrapper}
+        loop={false}
+        onIndexChanged={handleIndexChanged}
+      >
+        {/* Page 1 */}
+        <View style={styles.slide}>
+          <Image source={require('../../assets/images/onboarding1.png')} style={styles.image} resizeMode="contain" />
+          <Text style={styles.title}>Unplanned expense?</Text>
+          <Text style={styles.text}>
+            Create an <Text style={{ color: '#aaa' }}>adaptive strategy</Text> based on your spending.
+          </Text>
+          <TouchableOpacity style={styles.nextButton}>
+            <Text style={styles.nextText}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Page 2 */}
+        <View style={styles.slide}>
+          <Image source={require('../../assets/images/onboarding2.png')} style={styles.image} resizeMode="contain"/>
+          <Text style={styles.title}>Stay Organized</Text>
+          <Text style={styles.text}>
+            Keep track of your tasks and projects seamlessly.
+          </Text>
+          <TouchableOpacity style={styles.nextButton} onPress={handleGetStarted}>
+            <Text style={styles.nextText}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Page 3 */}
+        <View style={styles.slide}>
+          <Image source={require('../../assets/images/onboarding3.png')} style={styles.image} resizeMode="contain"/>
+          <Text style={styles.title}>Get Started</Text>
+          <Text style={styles.text}>
+            Join us and explore the possibilities.
+          </Text>
+          <TouchableOpacity style={styles.nextButton} onPress={handleGetStarted}>
+            <Text style={styles.nextText}>NEXT</Text>
+          </TouchableOpacity>
+        </View>
+      </Swiper>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  progressBarContainer: {
+    height: 8,
+    backgroundColor: '#ddd',
+    marginTop: 50,
+    width: '75%',
+    borderRadius: 8,
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#4CAF50',
+    borderRadius: 8,
+  },
   wrapper: {},
   slide: {
     flex: 1,
@@ -60,48 +102,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: '100%',
     marginBottom: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
     marginBottom: 10,
   },
   text: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
     textAlign: 'center',
     marginBottom: 20,
   },
-  button: {
+  nextButton: {
+    backgroundColor: "#9AEF5E",
+    padding: 15,
+    borderRadius: 50,
+    alignItems: "center",
     marginTop: 20,
-    backgroundColor: '#007BFF',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 25,
+    marginBottom: 10,
+    width: 200,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  dot: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 3,
-  },
-  activeDot: {
-    backgroundColor: '#007BFF',
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 3,
+  nextText: {
+    color: "#000",
+    fontWeight: "bold",
   },
 });
 
