@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 type Notification = {
 	id: string;
 	date: string;
@@ -73,7 +73,8 @@ export default function NotificationsScreen() {
 const styles = StyleSheet.create({
 container: {
 	flex: 1,
-	backgroundColor: 'black', 
+	backgroundColor: 'black',
+	paddingTop: ('5%'), 
 },
 notificationsContainer: {
 	alignItems: 'center',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 export default function SettingsScreen() {
   return (
     <View style={styles.container}>
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black', 
+    paddingTop: ('5%'),
   },
   profileContainer: {
     alignItems: 'center',

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'rea
 import HeaderComponent from '@/components/HeaderComponent';
 import EntriesTab from '@/components//EntriesTab';
 import ChartsTab from '@/components/ChartsTab';
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
+    paddingTop: ('5%'),
   },
   content: {
     flex: 1,
