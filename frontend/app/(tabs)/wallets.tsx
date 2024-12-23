@@ -17,7 +17,7 @@ export default function WalletsScreen() {
         <Text style={styles.sectionTitle}>My Wallets</Text>
         <View>
           <View style={styles.inputContainer}>
-            <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+            <Image source={require('../../assets/icons/Cash.svg')} style={styles.icon} />
             <View style={styles.rightContainer}>
               <View style={styles.walletRow}>
                 <View style={styles.walletInfo}>

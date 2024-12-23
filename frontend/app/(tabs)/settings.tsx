@@ -1,64 +1,100 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
+interface Values {
+  fullName: string;
+  country: string;
+  job: string;
+}
+
+const fieldIconMap: Record<string, any> = {
+  fullName: require('../../assets/icons/full-name.svg'),
+  country: require('../../assets/icons/country.svg'),
+  job: require('../../assets/icons/job.svg'),
+};
+
 export default function SettingsScreen() {
+  const [editField, setEditField] = useState<keyof Values | null>(null);
+  const [values, setValues] = useState<Values>({
+    fullName: 'Corin Reveck',
+    country: 'Vietnam',
+    job: 'Alchemist',
+  });
+
+  const handleEditPress = (field: keyof Values) => {
+    setEditField(editField === field ? null : field);
+  };
+
+  const handleInputChange = (field: keyof Values, value: string) => {
+    setValues((prevValues) => ({ ...prevValues, [field]: value }));
+  };
+
+  const renderInputOrText = (field: keyof Values, label: string) => {
+    const isEditing = editField === field;
+
+    return (
+      <View style={styles.inputContainer}>
+        <Image source={fieldIconMap[field]} style={styles.icon} />
+        <View style={styles.rightContainer}>
+          <Text style={styles.inputLabel}>{label}</Text>
+          <View style={styles.inputRow}>
+            {isEditing ? (
+              <TextInput
+                style={styles.inputValue}
+                value={values[field]}
+                onChangeText={(text) => handleInputChange(field, text)}
+                autoFocus
+              />
+            ) : (
+              <Text style={styles.inputValue}>{values[field]}</Text>
+            )}
+            <TouchableOpacity onPress={() => handleEditPress(field)}>
+              <Image
+                source={
+                  isEditing
+                    ? require('../../assets/icons/done.svg')
+                    : require('../../assets/icons/edit.svg')
+                }
+                style={styles.icon_edit}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const handleTouchablePressOutside = () => {
+    Keyboard.dismiss();
+    if (editField !== null) {
+      setEditField(null);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <HeaderComponent />
+    <TouchableWithoutFeedback onPress={handleTouchablePressOutside}>
+      <View style={styles.container}>
+        <HeaderComponent />
 
-      <View style={styles.profileContainer}>
-        <Text style={styles.profileTitle}>Profile</Text>
-        <Image
-          source={{ uri: 'https://www.shareicon.net/data/128x128/2016/09/15/829459_man_512x512.png' }}
-          style={styles.profileImage}
-        />
+        <View style={styles.profileContainer}>
+          <Text style={styles.profileTitle}>Profile</Text>
+          <Image
+            source={{ uri: 'https://www.shareicon.net/data/128x128/2016/09/15/829459_man_512x512.png' }}
+            style={styles.profileImage}
+          />
+        </View>
+
+        <View style={styles.formContainer}>
+          {renderInputOrText('fullName', 'Full name')}
+          {renderInputOrText('country', 'Country')}
+          {renderInputOrText('job', 'Job')}
+        </View>
       </View>
-
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -106,9 +142,13 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   icon: {
-    width: 30, 
-    height: 30, 
+    width: 40, 
+    height: 40, 
     marginRight: 10
+  },
+  icon_edit: {
+    width: 20, 
+    height: 20,
   },
   rightContainer: {
     flex: 1,
@@ -134,9 +174,5 @@ const styles = StyleSheet.create({
   },
   arrowButton: {
     paddingLeft: 10,
-  },
-  arrowText: {
-    fontSize: 20,
-    color: '#333',
   },
 });
