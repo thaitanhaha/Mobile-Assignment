@@ -17,39 +17,39 @@ export default function SettingsScreen() {
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+          <Image source={require('../../assets/icons/full-name.svg')} style={styles.icon} />
           <View style={styles.rightContainer}>
             <Text style={styles.inputLabel}>Full name</Text>
             <View style={styles.inputRow}>
               <Text style={styles.inputValue}>Corin Reveck</Text>
               <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
+                <Image source={require('../../assets/icons/edit.svg')} style={styles.icon_edit} />
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
         <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+          <Image source={require('../../assets/icons/country.svg')} style={styles.icon} />
           <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
+            <Text style={styles.inputLabel}>Country</Text>
             <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
+              <Text style={styles.inputValue}>Vietnam</Text>
               <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
+                <Image source={require('../../assets/icons/edit.svg')} style={styles.icon_edit} />
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
         <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+          <Image source={require('../../assets/icons/job.svg')} style={styles.icon} />
           <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
+            <Text style={styles.inputLabel}>Job</Text>
             <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
+              <Text style={styles.inputValue}>Alchemist</Text>
               <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
+                <Image source={require('../../assets/icons/edit.svg')} style={styles.icon_edit} />
               </TouchableOpacity>
             </View>
           </View>
@@ -106,9 +106,13 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   icon: {
-    width: 30, 
-    height: 30, 
+    width: 40, 
+    height: 40, 
     marginRight: 10
+  },
+  icon_edit: {
+    width: 20, 
+    height: 20, 
   },
   rightContainer: {
     flex: 1,

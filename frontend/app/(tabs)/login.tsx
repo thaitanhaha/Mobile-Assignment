@@ -10,23 +10,25 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-            source={require('../../assets/images/favicon.png')}
+            source={require('../../assets/images/Mooney.png')}
+            resizeMode="contain"
+            style={{width: '90%'}}
         />
       </View>
       <View style={styles.inputContainer}>
-        <Image source={require('../../assets/images/favicon.png')} style={styles.icon}/>
+        <Image source={require('../../assets/icons/email.svg')} style={styles.icon}/>
         <TextInput style={styles.input} placeholder="Email" value={email} 
             onChangeText={setEmail} keyboardType="email-address"/>
-        <TouchableOpacity style={styles.clearButton} onPress={() => setEmail("")}>
-        <Text>X</Text>
+        <TouchableOpacity onPress={() => setEmail("")}>
+          <Image source={require('../../assets/icons/clear.svg')} style={{width: 30, height: 30}}/>
         </TouchableOpacity>
       </View>
       <View style={styles.inputContainer}>
-        <Image source={require('../../assets/images/favicon.png')} style={styles.icon}/>
+        <Image source={require('../../assets/icons/password.svg')} style={styles.icon}/>
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={!showPassword} value={password} 
             onChangeText={setPassword} />
-        <TouchableOpacity style={styles.eyeButton} onPress={() => setShowPassword(!showPassword)}>
-          <Text>{showPassword ? "🙈" : "👁"}</Text>
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Image source={require('../../assets/icons/password_hide.svg')} style={{width: 30, height: 30}}/>
         </TouchableOpacity>
       </View>
       <TouchableOpacity>
@@ -37,7 +39,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
       <Text style={styles.orText}>or</Text>
       <TouchableOpacity style={styles.googleButton}>
-        <Image source={require('../../assets/images/favicon.png')} style={{width: 25, height: 25, marginRight: 10}}/>
+        <Image source={require('../../assets/icons/google.svg')} style={{width: 25, height: 25, marginRight: 10}}/>
         <Text style={styles.googleText}>CONTINUE WITH GOOGLE</Text>
       </TouchableOpacity>
       <TouchableOpacity>
@@ -64,19 +66,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
   input: {
     flex: 1,
     height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
     marginLeft: 8,
-  },
-  clearButton: {
-    padding: 10,
-  },
-  eyeButton: {
-    padding: 10,
   },
   forgotPassword: {
     textAlign: "right",
@@ -97,7 +93,7 @@ const styles = StyleSheet.create({
   orText: {
     textAlign: "center",
     marginBottom: 10,
-    color: "#000",
+    color: "#2F5711",
     fontWeight: 'bold'
   },
   googleButton: {
@@ -122,8 +118,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   icon: {
-	width: 30, 
-	height: 30, 
-	marginRight: 10
-},
+    width: 40, 
+    height: 40, 
+    marginRight: 10
+  },
 });

@@ -60,22 +60,28 @@ export default function HomeScreen() {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.cards}>
               <View style={[styles.card, { backgroundColor: '#BAEC97' }]}>
-                <TouchableOpacity style={{ backgroundColor: 'white', height: 50, width: 50 }}>
-                  <Text>Button</Text>
+                <TouchableOpacity style={styles.plus}>
+                  <Image source={require('../../assets/icons/plus.svg')}/>
                 </TouchableOpacity>
-                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Total</Text>
                   <Text style={styles.cardDescription}>Something...</Text>
                 </View>
               </View>
               <View style={[styles.card, { backgroundColor: '#E7FD72' }]}>
-                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                <TouchableOpacity style={styles.plus}>
+                  <Image source={require('../../assets/icons/plus.svg')}/>
+                </TouchableOpacity>
+                <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Charts</Text>
                   <Text style={styles.cardDescription}>Something...</Text>
                 </View>
               </View>
               <View style={[styles.card, { backgroundColor: '#FFD700' }]}>
-                <View style={{ marginLeft: 8, marginBottom: 16 }}>
+                <TouchableOpacity style={styles.plus}>
+                  <Image source={require('../../assets/icons/plus.svg')}/>
+                </TouchableOpacity>
+                <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Savings</Text>
                   <Text style={styles.cardDescription}>Something...</Text>
                 </View>
@@ -88,7 +94,7 @@ export default function HomeScreen() {
           <View style={{flex: 1, paddingHorizontal: 16,}}>
               <View style={[styles.entryInfo, styles.totalsavings]}>
                 <Text style={{fontWeight: 'bold'}}>Total Savings</Text>
-                <Image source={require('../../assets/images/favicon.png')} />
+                <Image source={require('../../assets/icons/total_saving.svg')}/>
               </View>
           </View>
         </View>
@@ -271,6 +277,18 @@ const styles = StyleSheet.create({
     borderRadius: 8, 
     borderColor: 'white', 
     backgroundColor: '#9AEF5E', 
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingVertical: 4,
+  },
+  plus: {
+    backgroundColor: '#FAFAFA', 
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    marginLeft: 16,
+    marginTop: 16,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
