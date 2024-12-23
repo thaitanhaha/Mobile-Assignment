@@ -92,9 +92,11 @@ export default function HomeScreen() {
       ) : (
         <View style={styles.inputContainer}>
           <View style={{flex: 1, paddingHorizontal: 16,}}>
-              <View style={[styles.entryInfo, styles.totalsavings]}>
+              <View style={styles.totalsavings}>
                 <Text style={{fontWeight: 'bold'}}>Total Savings</Text>
-                <Image source={require('../../assets/icons/total_saving.svg')}/>
+                <Image source={require('../../assets/icons/total_saving.svg')} 
+                  style={{width: 50, height: 44}}
+                />
               </View>
           </View>
         </View>
@@ -252,14 +254,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#f9f9f9',
   },
-  entryInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    fontWeight: 'bold',
-    marginBottom: 4,
-    alignItems: 'center',
-  },
   entryName: {
     color: 'black',
     fontWeight: 'bold',
@@ -272,13 +266,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   totalsavings: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    fontWeight: 'bold',
+    marginBottom: 4,
+    alignItems: 'center',
     marginTop: 16,
     paddingHorizontal: 20, 
-    borderRadius: 8, 
-    borderColor: 'white', 
-    backgroundColor: '#9AEF5E', 
-    flexDirection: 'row',
     paddingVertical: 4,
+    borderRadius: 8,  
+    backgroundColor: '#9AEF5E', 
   },
   plus: {
     backgroundColor: '#FAFAFA', 
