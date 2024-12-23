@@ -25,7 +25,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color }: { color: string }) => (
             <Image
               source={require('../../assets/icons/tabs/home.svg')}
               style={{ width: '60%', height: '60%', tintColor: color, resizeMode: 'contain' }}
