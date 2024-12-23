@@ -5,14 +5,21 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import LoginScreen from "./login";
+import { useRouter } from 'expo-router';
+
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
-
+  const route = useRouter();
+  const handleBackPress = () => {
+    route.navigate('/(tabs)/login');
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
         <Text>{"<"}</Text>
       </TouchableOpacity>
       <Text style={styles.headerText}>Enter your email address</Text>
@@ -79,4 +86,4 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-});
+})
