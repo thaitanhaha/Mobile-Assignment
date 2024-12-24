@@ -37,7 +37,7 @@ export default function RegisterScreen() {
 
   const handleBack = () => {
     if (step === 1) {
-      router.replace('/(tabs)')
+      router.replace('/(login)')
     } else {
       setStep(step - 1)
     }
@@ -46,7 +46,9 @@ export default function RegisterScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <Text>{"<"}</Text>
+        <Image
+            source={require('../../assets/icons/leftarrow.svg')}
+        />
       </TouchableOpacity>
 
       {step === 1 && (
@@ -142,6 +144,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginBottom: 20,
+    width: 50, height: 50, borderRadius: 25,
+    backgroundColor: 'lightgrey',
+    alignItems: 'center',
+    flexDirection: 'column', justifyContent: 'center'
   },
   headerText: {
     fontSize: 24,

@@ -7,18 +7,17 @@ const OnboardingScreen: React.FC = () => {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.replace('/(tabs)/login');
+    router.replace('../(login)');
   };
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const swiperRef = useRef<Swiper>(null);  // Ref to control swiper
+  const swiperRef = useRef<Swiper>(null);
 
   const handleIndexChanged = (index: number) => {
     setActiveIndex(index);
   };
 
   const handleNextPress = () => {
-    // Scroll to the next page programmatically
     if (swiperRef.current) {
       swiperRef.current.scrollBy(1);
     }
@@ -33,7 +32,7 @@ const OnboardingScreen: React.FC = () => {
       </View>
 
       <Swiper
-        ref={swiperRef}  // Set the ref for controlling the swiper
+        ref={swiperRef}
         style={styles.wrapper}
         loop={false}
         onIndexChanged={handleIndexChanged}

@@ -18,6 +18,9 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  // Check if this is the first launch of the app
   useEffect(() => {
     const checkFirstLaunch = async () => {
       const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
@@ -26,14 +29,24 @@ export default function RootLayout() {
     checkFirstLaunch();
   }, []);
 
+  // Check if the user is logged in
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      const token = await AsyncStorage.getItem('authToken'); // Replace with your auth logic
+      setIsAuthenticated(!!token); // Set true if token exists, otherwise false
+    };
+    checkAuthentication();
+  }, []);
+
+  // Hide splash screen once fonts and other assets are loaded
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync(); 
     }
   }, [loaded]);
 
-  if (!loaded || isFirstLaunch === null) {
-    return null;
+  if (!loaded || isFirstLaunch === null || isAuthenticated === null) {
+    return null; // Wait until everything is loaded and state is determined
   }
 
   return (
@@ -45,8 +58,10 @@ export default function RootLayout() {
       >
         {isFirstLaunch ? (
           <Stack.Screen name="onboarding" />
+        ) : isAuthenticated ? (
+          <Stack.Screen name="(tabs)" />
         ) : (
-          <Stack.Screen name="(tabs)"/>
+          <Stack.Screen name="login" />
         )}
         <Stack.Screen name="+not-found" />
       </Stack>
