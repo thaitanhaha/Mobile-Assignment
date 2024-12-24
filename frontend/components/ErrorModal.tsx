@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import ErrorSVG from '../assets/icons/error.svg';
 
 interface ErrorModalProps {
   visible: boolean;
@@ -18,10 +19,7 @@ export default function ErrorModal({ visible, message, onClose }: ErrorModalProp
     >
         <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-                <Image
-                    source={require('../assets/icons/error.svg')}
-                    style={{ width: 75, height: 75 }}
-                />
+                <ErrorSVG style={{ width: 75, height: 75 }} />
                 <Text style={styles.modalTitle}>{message}</Text>
             </View>
         </View>

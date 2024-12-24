@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import { ProgressBar } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import CashSVG from '../../assets/icons/Cash.svg';
+
 export default function WalletsScreen() {
   return (
     <View style={styles.container}>
@@ -17,7 +19,7 @@ export default function WalletsScreen() {
         <Text style={styles.sectionTitle}>My Wallets</Text>
         <View>
           <View style={styles.inputContainer}>
-            <Image source={require('../../assets/icons/Cash.svg')} style={styles.icon} />
+            <CashSVG style={styles.icon} />
             <View style={styles.rightContainer}>
               <View style={styles.walletRow}>
                 <View style={styles.walletInfo}>

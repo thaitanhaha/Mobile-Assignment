@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import NotiSVG from '../assets/icons/noti.svg';
 
 const HeaderComponent = () => {
   const router = useRouter();
@@ -29,10 +30,7 @@ const HeaderComponent = () => {
           <Text style={styles.buttonText}>Get Suggestion</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.notificationBell} onPress={handleNotifications}>
-          <Image
-            source={require('../assets/icons/noti.svg')}
-            style={{width: '60%', height: '60%', alignSelf: 'center',}}
-          />
+          <NotiSVG style={{width: '60%', height: '60%', alignSelf: 'center',}}/>
         </TouchableOpacity>
       </View>
     </View>

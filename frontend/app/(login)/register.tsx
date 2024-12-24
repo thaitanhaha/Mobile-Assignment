@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "reac
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
+import LeftArrowSVG from '../../assets/icons/leftarrow.svg';
+import PasswordHideSVG from '../../assets/icons/password_hide.svg';
 
 export default function RegisterScreen() {
   const [step, setStep] = useState(1);
@@ -46,9 +48,7 @@ export default function RegisterScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <Image
-            source={require('../../assets/icons/leftarrow.svg')}
-        />
+        <LeftArrowSVG/>
       </TouchableOpacity>
 
       {step === 1 && (
@@ -97,7 +97,7 @@ export default function RegisterScreen() {
               onChangeText={setPassword} 
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Image source={require('../../assets/icons/password_hide.svg')} style={{width: 30, height: 30}}/>
+              <PasswordHideSVG style={{width: 30, height: 30}} />
             </TouchableOpacity>
           </View>
           <Text style={styles.subText}>
@@ -117,7 +117,7 @@ export default function RegisterScreen() {
               onChangeText={setConfirmPassword} 
             />
             <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-              <Image source={require('../../assets/icons/password_hide.svg')} style={{width: 30, height: 30}}/>
+              <PasswordHideSVG style={{width: 30, height: 30}} />
             </TouchableOpacity>
           </View>
         </>

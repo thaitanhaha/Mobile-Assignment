@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
+import DoneSVG from '../../assets/icons/done.svg';
+import EditSVG from '../../assets/icons/edit.svg';
+import FullnameSVG from '../../assets/icons/full-name.svg';
+import CountrySVG from '../../assets/icons/country.svg';
+import JobSVG from '../../assets/icons/job.svg';
 
 interface Values {
   fullName: string;
@@ -8,10 +13,10 @@ interface Values {
   job: string;
 }
 
-const fieldIconMap: Record<string, any> = {
-  fullName: require('../../assets/icons/full-name.svg'),
-  country: require('../../assets/icons/country.svg'),
-  job: require('../../assets/icons/job.svg'),
+const fieldIconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
+  fullName: FullnameSVG,
+  country: CountrySVG,
+  job: JobSVG,
 };
 
 export default function SettingsScreen() {
@@ -32,10 +37,11 @@ export default function SettingsScreen() {
 
   const renderInputOrText = (field: keyof Values, label: string) => {
     const isEditing = editField === field;
+    const IconComponent = fieldIconMap[field];
 
     return (
       <View style={styles.inputContainer}>
-        <Image source={fieldIconMap[field]} style={styles.icon} />
+        <IconComponent style={styles.icon} />
         <View style={styles.rightContainer}>
           <Text style={styles.inputLabel}>{label}</Text>
           <View style={styles.inputRow}>
@@ -50,14 +56,11 @@ export default function SettingsScreen() {
               <Text style={styles.inputValue}>{values[field]}</Text>
             )}
             <TouchableOpacity onPress={() => handleEditPress(field)}>
-              <Image
-                source={
-                  isEditing
-                    ? require('../../assets/icons/done.svg')
-                    : require('../../assets/icons/edit.svg')
-                }
-                style={styles.icon_edit}
-              />
+              {isEditing ? (
+                <DoneSVG style={styles.icon_edit} />
+              ) : (
+                <EditSVG style={styles.icon_edit} />
+              )}
             </TouchableOpacity>
           </View>
         </View>

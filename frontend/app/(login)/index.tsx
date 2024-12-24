@@ -4,6 +4,11 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorModal from "../../components/ErrorModal";
+import EmailSVG from '../../assets/icons/email.svg';
+import ClearSVG from '../../assets/icons/clear.svg';
+import PasswordSVG from '../../assets/icons/password.svg';
+import PasswordHideSVG from '../../assets/icons/password_hide.svg';
+import GoogleSVG from '../../assets/icons/google.svg';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -69,7 +74,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Image source={require('../../assets/icons/email.svg')} style={styles.icon} />
+        <EmailSVG style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -78,11 +83,11 @@ export default function LoginScreen() {
           keyboardType="email-address"
         />
         <TouchableOpacity onPress={() => setEmail("")}>
-          <Image source={require('../../assets/icons/clear.svg')} style={{ width: 30, height: 30 }} />
+          <ClearSVG style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
       </View>
       <View style={styles.inputContainer}>
-        <Image source={require('../../assets/icons/password.svg')} style={styles.icon} />
+        <PasswordSVG style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -91,7 +96,7 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Image source={require('../../assets/icons/password_hide.svg')} style={{ width: 30, height: 30 }} />
+          <PasswordHideSVG style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
       </View>
       <TouchableOpacity>
@@ -102,7 +107,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
       <Text style={styles.orText}>or</Text>
       <TouchableOpacity style={styles.googleButton}>
-        <Image source={require('../../assets/icons/google.svg')} style={{ width: 25, height: 25, marginRight: 10 }} />
+        <GoogleSVG style={{ width: 25, height: 25, marginRight: 10 }} />
         <Text style={styles.googleText}>CONTINUE WITH GOOGLE</Text>
       </TouchableOpacity>
       <View style={styles.textContainer}>

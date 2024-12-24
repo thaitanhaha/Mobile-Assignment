@@ -5,6 +5,11 @@ import { Platform, Image } from 'react-native';
 import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
+import HomeSVG from '../../assets/icons/tabs/home.svg';
+import WalletsSVG from '../../assets/icons/tabs/wallets.svg';
+import AddSVG from '../../assets/icons/tabs/add.svg';
+import NotificationsSVG from '../../assets/icons/tabs/notifications.svg';
+import SettingsSVG from '../../assets/icons/tabs/settings.svg';
 
 export default function TabLayout() {
   return (
@@ -26,10 +31,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }: { color: string }) => (
-            <Image
-              source={require('../../assets/icons/tabs/home.svg')}
-              style={{ width: '60%', height: '60%', tintColor: color, resizeMode: 'contain' }}
-            />
+            <HomeSVG style={{ width: '60%', height: '60%' }} />
           ),
         }}
       />
@@ -38,10 +40,7 @@ export default function TabLayout() {
         options={{
           title: 'Wallets',
           tabBarIcon: ({ color }) => (
-            <Image
-              source={require('../../assets/icons/tabs/wallets.svg')}
-              style={{ width: '50%', height: '50%', tintColor: color, resizeMode: 'contain' }}
-            />
+            <WalletsSVG style={{ width: '50%', height: '50%' }} />
           ),
         }}
       />
@@ -50,10 +49,7 @@ export default function TabLayout() {
         options={{
           title: 'Add',
           tabBarIcon: ({ color }) => (
-            <Image
-              source={require('../../assets/icons/tabs/add.svg')}
-              style={{ width: '100%', height: '100%', resizeMode: 'stretch' }}
-            />
+            <AddSVG style={{ width: '100%', height: '100%' }} />
           ),
         }}
       />
@@ -62,10 +58,7 @@ export default function TabLayout() {
         options={{
           title: 'Notifications',
           tabBarIcon: ({ color }) => (
-            <Image
-              source={require('../../assets/icons/tabs/notifications.svg')}
-              style={{ width: '60%', height: '60%', tintColor: color, resizeMode: 'contain' }}
-            />
+            <NotificationsSVG style={{ width: '60%', height: '60%' }} />
           ),
         }}
       />
@@ -74,10 +67,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => (
-            <Image
-              source={require('../../assets/icons/tabs/settings.svg')}
-              style={{ width: '60%', height: '60%', tintColor: color, resizeMode: 'contain' }}
-            />
+            <SettingsSVG style={{ width: '60%', height: '60%' }} />
           ),
         }}
       />

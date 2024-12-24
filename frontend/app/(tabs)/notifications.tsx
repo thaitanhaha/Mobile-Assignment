@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react
 import HeaderComponent from '@/components/HeaderComponent';
 import DeleteModal from '../../components/DeleteModal';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import WarningSVG from '../../assets/icons/warning.svg';
+import EditSVG from '../../assets/icons/edit.svg';
+import DeleteSVG from '../../assets/icons/delete.svg';
 
 type Notification = {
   id: string;
@@ -48,14 +51,12 @@ export default function NotificationsScreen() {
 
   const renderItem = ({ item }: { item: Notification }) => (
     <View style={styles.inputContainer}>
-      <Image
-        source={
-          item.noti_type === 'update'
-            ? require('../../assets/icons/edit.svg')
-            : require('../../assets/icons/warning.svg')
-        }
-        style={styles.icon}
-      />
+      {item.noti_type === 'update' ? (
+        <EditSVG style={styles.icon} />
+      ) : (
+        <WarningSVG style={styles.icon} />
+      )}
+
       <View style={styles.rightContainer}>
         <Text style={styles.inputLabel}>{item.date}</Text>
         <View style={styles.inputRow}>
@@ -76,10 +77,7 @@ export default function NotificationsScreen() {
             style={styles.arrowButton}
             onPress={() => handleDeletePress(item)}
           >
-            <Image
-              source={require('../../assets/icons/delete.svg')}
-              style={{ width: 20, height: 20 }}
-            />
+            <DeleteSVG style={{ width: 20, height: 20 }} />
           </TouchableOpacity>
         </View>
       </View>

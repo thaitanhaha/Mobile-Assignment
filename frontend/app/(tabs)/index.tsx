@@ -4,6 +4,9 @@ import HeaderComponent from '@/components/HeaderComponent';
 import EntriesTab from '@/components//EntriesTab';
 import ChartsTab from '@/components/ChartsTab';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import TotalSavingSVG from '../../assets/icons/total_saving.svg';
+import PlusSVG from '../../assets/icons/plus.svg';
+
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
@@ -61,7 +64,7 @@ export default function HomeScreen() {
             <View style={styles.cards}>
               <View style={[styles.card, { backgroundColor: '#BAEC97' }]}>
                 <TouchableOpacity style={styles.plus}>
-                  <Image source={require('../../assets/icons/plus.svg')}/>
+                  <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Total</Text>
@@ -70,7 +73,7 @@ export default function HomeScreen() {
               </View>
               <View style={[styles.card, { backgroundColor: '#E7FD72' }]}>
                 <TouchableOpacity style={styles.plus}>
-                  <Image source={require('../../assets/icons/plus.svg')}/>
+                  <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Charts</Text>
@@ -79,7 +82,7 @@ export default function HomeScreen() {
               </View>
               <View style={[styles.card, { backgroundColor: '#FFD700' }]}>
                 <TouchableOpacity style={styles.plus}>
-                  <Image source={require('../../assets/icons/plus.svg')}/>
+                  <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>
                   <Text style={styles.cardTitle}>Savings</Text>
@@ -94,9 +97,7 @@ export default function HomeScreen() {
           <View style={{flex: 1, paddingHorizontal: 16,}}>
               <View style={styles.totalsavings}>
                 <Text style={{fontWeight: 'bold'}}>Total Savings</Text>
-                <Image source={require('../../assets/icons/total_saving.svg')} 
-                  style={{width: 50, height: 44}}
-                />
+                <TotalSavingSVG style={{width: 50, height: 44}} />
               </View>
           </View>
         </View>
