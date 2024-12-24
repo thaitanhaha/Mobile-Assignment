@@ -8,11 +8,19 @@ import 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://59d3f7bec707b2c948b272820a95eca7@o4508525007667200.ingest.de.sentry.io/4508525009829968',
+
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // enableSpotlight: __DEV__,
+});
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -57,11 +65,11 @@ export default function RootLayout() {
         }}
       >
         {isFirstLaunch ? (
-          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="(onboarding)" />
         ) : isAuthenticated ? (
           <Stack.Screen name="(tabs)" />
         ) : (
-          <Stack.Screen name="login" />
+          <Stack.Screen name="(login)" />
         )}
         <Stack.Screen name="+not-found" />
       </Stack>
@@ -69,3 +77,5 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+export default Sentry.wrap(RootLayout);
