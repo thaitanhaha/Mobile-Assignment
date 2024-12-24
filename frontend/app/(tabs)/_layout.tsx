@@ -49,7 +49,7 @@ export default function TabLayout() {
         options={{
           title: 'Add',
           tabBarIcon: ({ color }) => (
-            <AddSVG style={{ width: '100%', height: '100%' }} />
+            <AddSVG style={{ width: '75%', height: '75%' }} />
           ),
         }}
       />
