@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useRouter } from 'expo-router';
+
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
+  const handleRegister = () => {
+    router.replace('/(tabs)/register');
+  };
+  const handleForgotPassword = () => {
+    router.replace('/(tabs)/register');
+  };
+
 
   return (
     <View style={styles.container}>
@@ -42,11 +53,14 @@ export default function LoginScreen() {
         <Image source={require('../../assets/icons/google.svg')} style={{width: 25, height: 25, marginRight: 10}}/>
         <Text style={styles.googleText}>CONTINUE WITH GOOGLE</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <View style={styles.textContainer}>
         <Text style={styles.registerText}>
-          DON'T HAVE AN ACCOUNT? <Text style={styles.register}>REGISTER</Text>
+          DON'T HAVE AN ACCOUNT?
         </Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress = {(handleRegister)}>
+          <Text style={styles.register}> REGISTER</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -61,6 +75,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: "center",
     marginBottom: 40,
+    paddingLeft: 25,
   },
   inputContainer: {
     flexDirection: "row",
@@ -69,6 +84,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
+  textContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
   input: {
     flex: 1,
     height: 40,
@@ -76,8 +97,9 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "right",
-    fontWeight: 'bold',
+    fontWeight: 'medium',
     marginBottom: 20,
+    textDecorationLine: 'underline'
   },
   nextButton: {
     backgroundColor: "#9AEF5E",

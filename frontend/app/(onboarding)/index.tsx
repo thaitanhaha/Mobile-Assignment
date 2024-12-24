@@ -7,7 +7,7 @@ const OnboardingScreen: React.FC = () => {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.replace('/(tabs)');
+    router.replace('/(tabs)/login');
   };
 
   const [activeIndex, setActiveIndex] = useState(0);
