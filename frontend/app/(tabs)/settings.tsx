@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import DoneSVG from '../../assets/icons/done.svg';
 import EditSVG from '../../assets/icons/edit.svg';
@@ -88,11 +88,11 @@ export default function SettingsScreen() {
           />
         </View>
 
-        <View style={styles.formContainer}>
+        <ScrollView style={styles.formContainer}>
           {renderInputOrText('fullName', 'Full name')}
           {renderInputOrText('country', 'Country')}
           {renderInputOrText('job', 'Job')}
-        </View>
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );

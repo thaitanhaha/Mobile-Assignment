@@ -4,6 +4,7 @@ import HeaderComponent from '@/components/HeaderComponent';
 import { ProgressBar } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CashSVG from '../../assets/icons/Cash.svg';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function WalletsScreen() {
   return (
@@ -15,7 +16,7 @@ export default function WalletsScreen() {
         <Text style={styles.totalBalance}>Total Balance</Text>
       </View>
 
-      <View style={styles.formContainer}>
+      <ScrollView style={styles.formContainer}>
         <Text style={styles.sectionTitle}>My Wallets</Text>
         <View>
           <View style={styles.inputContainer}>
@@ -56,7 +57,7 @@ export default function WalletsScreen() {
           </View>
         </View>
 
-      </View>
+      </ScrollView>
     </View>
   );
 }
