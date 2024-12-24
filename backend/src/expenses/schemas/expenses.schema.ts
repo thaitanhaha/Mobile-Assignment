@@ -1,24 +1,22 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 @Schema()
 export class Expense extends Document {
-  @Prop({ type: String, required: true })
+  @Prop({ required: true, default: () => uuidv4() }) // Tạo ID tự động
   id: string;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ required: true })
   totalAmount: number;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ required: true })
   date: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   category: string;
 
-  @Prop({ 
-    type: [{ name: { type: String }, price: { type: Number } }],
-    required: false
-  })
+  @Prop({ type: [{ name: String, price: Number }], default: [] })
   items: { name: string; price: number }[];
 }
 

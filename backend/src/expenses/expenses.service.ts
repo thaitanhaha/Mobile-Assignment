@@ -17,6 +17,17 @@ export class ExpensesService {
     return await newExpense.save();
   }
 
+  async update(id: string, updateExpenseDto: UpdateExpenseDto): Promise<Expense> {
+    const updatedExpense = await this.expenseModel
+      .findByIdAndUpdate(id, updateExpenseDto, { new: true })
+      .exec();
+    if (!updatedExpense) {
+      throw new NotFoundException(`Expense with ID ${id} not found`);
+    }
+    return updatedExpense;
+  }
+  
+
   // Tìm một Expense theo ID
   async findOne(id: string): Promise<Expense> {
     const expense = await this.expenseModel.findById(id).exec();
