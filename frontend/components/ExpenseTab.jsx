@@ -4,7 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { CameraView, Camera, useCameraPermissions, CameraType } from 'expo-camera';
-import * as Tesseract from 'tesseract.js';
+import { GOOGLE_VISION_API_KEY } from '@env';
+import axios from 'axios';
+import * as Sentry from '@sentry/react-native';
 
 export default function BudgetTab() {
   const [showCamera, setShowCamera] = useState(false);
@@ -64,23 +66,38 @@ export default function BudgetTab() {
       const data = await camera.takePictureAsync();
       setCapturedPhoto(data.uri);
       setShowCamera(false);
-      await recognizeText(data.uri);
+      const text = await recognizeText(data.uri);
+      setRecognizedText(text);
     } catch (error) {
       console.log('Error: ', error);
     }
   };
 
   const recognizeText = async (imageUri) => {
-    setLoading(true);
+    var final = 'ERROR'
     try {
-      const result = await Tesseract.recognize(imageUri, 'eng', {
-        logger: (info) => console.log(info),
+      const base64Content = imageUri.replace(/^data:image\/\w+;base64,/, '');
+      const url = `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_VISION_API_KEY}`;
+      const requestBody = {
+        requests: [
+          {
+            image: { content: base64Content },
+            features: [{ type: 'TEXT_DETECTION' }],
+          },
+        ],
+      };
+      const response = await axios.post(url, requestBody, {
+        headers: { 'Content-Type': 'application/json' },
       });
-      setRecognizedText(result.data.text);
+      const detections = response.data.responses[0].textAnnotations;
+      final = detections ? detections[0].description : 'No text detected';
     } catch (error) {
-      console.error('OCR Error: ', error);
-    } finally {
-      setLoading(false);
+      console.error('Error with Google Vision API:', error);
+      Sentry.captureException(error);
+      throw error;
+    }
+    finally {
+      return final;
     }
   };
 
