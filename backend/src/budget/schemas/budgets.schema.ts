@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 @Schema()
-export class Expense extends Document {
+export class Budget extends Document {
   @Prop({ required: true, default: () => uuidv4() })
   id: string;
 
@@ -20,4 +20,4 @@ export class Expense extends Document {
   items: { name: string; price: number }[];
 }
 
-export const ExpenseSchema = SchemaFactory.createForClass(Expense);
+export const BudgetSchema = SchemaFactory.createForClass(Budget);

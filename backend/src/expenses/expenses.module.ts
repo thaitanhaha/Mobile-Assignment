@@ -17,7 +17,7 @@ import { Expense, ExpenseSchema } from './schemas/expenses.schema';
   imports: [
     MongooseModule.forFeature([{ name: Expense.name, schema: ExpenseSchema }]),
   ],
-  controllers: [ExpensesController],
-  providers: [ExpensesService],
+  controllers: [ExpensesController], // Add your controllers here
+  providers: [ExpensesService],   // Add your services here
 })
 export class ExpenseModule {}

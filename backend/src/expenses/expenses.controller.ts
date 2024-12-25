@@ -138,7 +138,7 @@ export class ExpensesController {
     return this.expensesService.findAll();
   }
 
-  @Get('/chart')
+  @Get(':userId/chart')
   @ApiOperation({
     summary: 'Get spending data for chart visualization',
     description:
@@ -173,6 +173,11 @@ export class ExpensesController {
   @ApiResponse({
     status: 500,
     description: 'Internal server error.',
+  })
+  @ApiParam({
+    name: 'userId',
+    description: 'Unique identifier for the user.',
+    example: '123456789', // Example of the ID parameter
   })
   @ApiQuery({
     name: 'startDate',

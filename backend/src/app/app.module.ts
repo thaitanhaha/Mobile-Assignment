@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExpenseModule } from '../expenses/expenses.module';
 import { UploadModule } from '../upload/upload.module';
+import { BudgetModule } from '../budget/budgets.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UploadModule } from '../upload/upload.module';
     }),
     MongooseModule.forRoot(process.env.DB_URI),
     UploadModule, 
-    ExpenseModule],
+    ExpenseModule,
+    BudgetModule,],
   controllers: [AppController],
   providers: [AppService],
 })

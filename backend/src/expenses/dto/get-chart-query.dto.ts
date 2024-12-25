@@ -2,6 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsOptional, IsEnum, IsString } from 'class-validator';
 
 export class GetChartQueryDto {
+    @ApiProperty({
+        description: 'Unique identifier for the user',
+        type: String,
+        example: '12345678',
+    })
   @ApiProperty({
     description: 'Start date for the data range',
     type: String,
