@@ -28,6 +28,10 @@ export class CreateMGDto {
     @ApiProperty({ example: 'For business expansion', description: 'Purpose of the margin/goal' })
     @IsString()
     purpose: string;
+
+    @ApiProperty({ example: 'Week', description: 'Range of the margin/goal' })
+    @IsString()
+    range: string;
   
     @ApiProperty({ example: '2024-12-31', description: 'Deadline of the margin/goal' })
     @IsString()

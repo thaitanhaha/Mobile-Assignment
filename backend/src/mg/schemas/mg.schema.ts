@@ -23,6 +23,9 @@ export class MG extends Document {
   purpose: string;
 
   @Prop({ required: true })
+  range: string;
+
+  @Prop({ required: true })
   mgDate: string;
 }
 
