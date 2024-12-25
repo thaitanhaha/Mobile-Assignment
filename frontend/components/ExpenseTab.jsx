@@ -9,6 +9,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sentry from '@sentry/react-native';
 import axios from 'axios';
 import ErrorModal from "../components/ErrorModal";
+import SuccessModal from "../components/SuccessModal";
 import { useRouter } from 'expo-router';
 
 
@@ -22,6 +23,7 @@ export default function BudgetTab() {
   const [name, setName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
   
   /* Category selection (C) */
   const [category, setCategory] = useState('General');
@@ -148,13 +150,23 @@ export default function BudgetTab() {
       .then((res) => {
         console.log('Expense saved:', res.data);
         Sentry.captureMessage("Expense saved successfully");
-        window.location.reload();
-        router.replace('/add?tab=Expense')
+        setTimeout(() => {
+          handleSuccess()
+          window.location.reload();
+          router.replace('/add?tab=Expense')
+        }, 1000);
       })
       .catch((err) => {
         console.error('Error saving expense:', err);
         Sentry.captureException(err);
       });
+  };
+
+  const handleSuccess = () => {
+    setSuccessModalVisible(true);
+    setTimeout(() => {
+      setSuccessModalVisible(false);
+    }, 1000);
   };
 
   if (!permission) {
@@ -181,6 +193,11 @@ export default function BudgetTab() {
         visible={modalVisible}
         message={modalMessage}
         onClose={() => setModalVisible(false)}
+      />
+      <SuccessModal
+        visible={successModalVisible}
+        message="Success!"
+        onClose={() => setSuccessModalVisible(false)}
       />
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 2, paddingBottom: 60 }}

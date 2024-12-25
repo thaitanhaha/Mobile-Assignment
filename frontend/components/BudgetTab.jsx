@@ -5,8 +5,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
 import * as Sentry from '@sentry/react-native';
+import ErrorModal from "../components/ErrorModal";
+import SuccessModal from "../components/SuccessModal";
+import { useRouter } from 'expo-router';
 
 export default function BudgetTab() {
+  const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [name, setName] = useState('');
   
   /* Category selection (C) */
@@ -46,7 +53,6 @@ export default function BudgetTab() {
   };
 
   const handleSave = () => {
-    console.log(itemsC);
     const budgetData = {
       totalAmount: parseFloat(amount),
       date: '2024-12-25',
@@ -68,8 +74,11 @@ export default function BudgetTab() {
       .then((res) => {
         console.log('Budget saved:', res.data);
         Sentry.captureMessage("Budget saved successfully");
-        window.location.reload();
-        router.replace('/add?tab=Budget')
+        setTimeout(() => {
+          handleSuccess()
+          window.location.reload();
+          router.replace('/add?tab=Budget')
+        }, 1000);
       })
       .catch((err) => {
         console.error('Error saving budget:', err);
@@ -77,11 +86,28 @@ export default function BudgetTab() {
       });
   };
 
+  const handleSuccess = () => {
+    setSuccessModalVisible(true);
+    setTimeout(() => {
+      setSuccessModalVisible(false);
+    }, 1000);
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <ErrorModal
+        visible={modalVisible}
+        message={modalMessage}
+        onClose={() => setModalVisible(false)}
+      />
+      <SuccessModal
+        visible={successModalVisible}
+        message="Success!"
+        onClose={() => setSuccessModalVisible(false)}
+      />
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 2, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}

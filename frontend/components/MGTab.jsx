@@ -5,8 +5,15 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import * as Sentry from '@sentry/react-native';
+import ErrorModal from "../components/ErrorModal";
+import SuccessModal from "../components/SuccessModal";
+import { useRouter } from 'expo-router';
 
 export default function MGSTab() {
+  const router = useRouter();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [name, setName] = useState('');
 
   /* Category selection (C) */
@@ -43,6 +50,7 @@ export default function MGSTab() {
   const [selectedRange, setSelectedRange] = useState('A month');
   const [chosenDate, setChosenDate] = useState(new Date());
 
+
   const handleSave = () => {
     const goalData = {
       totalAmount: parseFloat(amount),
@@ -68,8 +76,11 @@ export default function MGSTab() {
       .then((res) => {
         console.log('MGS saved:', res.data);
         Sentry.captureMessage("MGS saved successfully");
-        window.location.reload();
-        router.replace('/add?tab=MG')
+        setTimeout(() => {
+          handleSuccess()
+          window.location.reload();
+          router.replace('/add?tab=MG')
+        }, 1000);
       })
       .catch((err) => {
         console.error('Error saving goals:', err);
@@ -77,11 +88,28 @@ export default function MGSTab() {
       });
   };
 
+  const handleSuccess = () => {
+    setSuccessModalVisible(true);
+    setTimeout(() => {
+      setSuccessModalVisible(false);
+    }, 1000);
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <ErrorModal
+        visible={modalVisible}
+        message={modalMessage}
+        onClose={() => setModalVisible(false)}
+      />
+      <SuccessModal
+        visible={successModalVisible}
+        message="Success!"
+        onClose={() => setSuccessModalVisible(false)}
+      />
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 2, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}

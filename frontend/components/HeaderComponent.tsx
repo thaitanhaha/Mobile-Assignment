@@ -10,10 +10,6 @@ const HeaderComponent = () => {
     router.replace('/notifications');
   };
 
-  const handleSuggestion = () => {
-    router.replace('/add?tab=MG');
-  };
-
   const handleSettings = () => {
     router.replace('/settings');
   };
@@ -30,7 +26,7 @@ const HeaderComponent = () => {
 
       {/* Right-Aligned Button and Notification Bell */}
       <View style={styles.rightSection}>
-        <TouchableOpacity style={styles.button} onPress={handleSuggestion}>
+        <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Get Suggestion</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.notificationBell} onPress={handleNotifications}>
