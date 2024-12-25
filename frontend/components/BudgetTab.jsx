@@ -11,21 +11,20 @@ export default function BudgetTab() {
   const [category, setCategory] = useState('General');
   const [openC, setOpenC] = useState(false);
   const [itemsC, setItemsC] = useState([
-    { label: 'Bills', value: '1' },
-    { label: 'Cash', value: '2' },
-    { label: 'Eating out', value: '3' },
-    { label: 'Entertainment', value: '4' },
-    { label: 'Expenses', value: '5' },
-    { label: 'Family', value: '6' },
-    { label: 'Groceries', value: '7' },
-    { label: 'Housing', value: '8' },
-    { label: 'Investments', value: '9' },
-    { label: 'Personal care', value: '10' },
-    { label: 'Salary', value: '11' },
-    { label: 'Savings', value: '12' },
-    { label: 'Shopping', value: '13' },
-    { label: 'Transport', value: '14' },
-    { label: 'Trips', value: '15' },
+    { label: 'Bills', value: 'Bills' },
+    { label: 'Cash', value: 'Cash' },
+    { label: 'Eating out', value: 'Eating out' },
+    { label: 'Entertainment', value: 'Entertainment' },
+    { label: 'Family', value: 'Family' },
+    { label: 'Groceries', value: 'Groceries' },
+    { label: 'Housing', value: 'Housing' },
+    { label: 'Investments', value: 'Investments' },
+    { label: 'Personal care', value: 'Personal care' },
+    { label: 'Salary', value: 'Salary' },
+    { label: 'Savings', value: 'Savings' },
+    { label: 'Shopping', value: 'Shopping' },
+    { label: 'Transport', value: 'Transport' },
+    { label: 'Trips', value: 'Trips' },
   ]);
 
   /* Amount Section (A) */
@@ -42,6 +41,38 @@ export default function BudgetTab() {
   
   const handleSelect = (method) => {
     setSelectedMethod(method === selectedMethod ? null : method);
+  };
+
+  const handleSave = () => {
+    console.log(itemsC);
+    const budgetData = {
+      totalAmount: parseFloat(amount),
+      date: '2024-12-25',
+      category: category,
+      items: [{ name: name.trim(), price: parseFloat(amount) }],
+    };
+  
+    if (!budgetData.totalAmount || !budgetData.items) {
+      setModalMessage("All fields are required!");
+      setModalVisible(true);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 1000);
+      return;
+    }
+  
+    axios
+      .post('https://mobile-assignment.onrender.com/budgets', budgetData)
+      .then((res) => {
+        console.log('Budget saved:', res.data);
+        Sentry.captureMessage("Budget saved successfully");
+        window.location.reload();
+        router.replace('/add?tab=Budget')
+      })
+      .catch((err) => {
+        console.error('Error saving budget:', err);
+        Sentry.captureException(err);
+      });
   };
 
   return (
@@ -142,7 +173,7 @@ export default function BudgetTab() {
             </TouchableOpacity>
           </View>
           <Text style={styles.note}>Choose one payment method.</Text>
-          <TouchableOpacity style={styles.button} onPress={null}>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Add Budget</Text>
           </TouchableOpacity>
         </View>

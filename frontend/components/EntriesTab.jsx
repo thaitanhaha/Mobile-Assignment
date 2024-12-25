@@ -1,17 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import ExpenseSVG from '../assets/icons/expense.svg';
+import BudgetSVG from '../assets/icons/budget.svg';
 
 function EntriesTab({ entries }) {
   return (
     <ScrollView style={{ paddingVertical: 8 }}>
       {entries.map((entry) => (
         <View key={entry.id} style={styles.inputContainer}>
-          <Image source={require('../assets/images/favicon.png')} style={styles.icon} />
+          {entry.totalAmount > 0 ? (
+            <BudgetSVG style={styles.icon} />
+          ) : (
+            <ExpenseSVG style={styles.icon} />
+          )}
           <View style={styles.rightContainer}>
             <View style={styles.entryRow}>
               <View style={styles.entryInfo}>
                 <Text style={styles.entryName}>{entry.items[0].name}</Text>
-                <Text style={styles.entryAmount}>{entry.totalAmount > 0 ? '+' : ''}{entry.totalAmount} USD</Text>
+                {entry.totalAmount > 0 ? (
+                  <Text style={styles.entryAmount}>+ {entry.totalAmount} USD</Text>
+                ) : (
+                  <Text style={styles.entryAmountMinus}>{entry.totalAmount} USD</Text>
+                )}
               </View>
               <Text>{entry.category} - {entry.date}</Text>
             </View>
@@ -62,6 +72,10 @@ const styles = StyleSheet.create({
     },
     entryAmount: {
       color: 'green',
+      fontWeight: 'bold',
+    },
+    entryAmountMinus: {
+      color: 'red',
       fontWeight: 'bold',
     },
   });

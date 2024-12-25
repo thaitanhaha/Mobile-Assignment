@@ -9,29 +9,45 @@ import PlusSVG from '../../assets/icons/plus.svg';
 import axios from 'axios';
 import * as Sentry from "@sentry/react-native";
 
-
+type Entry = {
+  _id: string;
+  totalAmount: number;
+  date: string;
+  category: string;
+  items: any[];
+};
 
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   
-  const getEntries = () => {
-      axios.get('https://mobile-assignment.onrender.com/expenses')
-          .then((res) => {
-                console.log(res.data); // Kiểm tra cấu trúc dữ liệu
-                setEntries(res.data);
-              Sentry.captureMessage("Entries fetched successfully");
-              setEntries(res.data);
-          })
-          .catch((err) => {
-              Sentry.captureException(err);
-              console.log(err);
-          });
+  const getEntries = async () => {
+    try {
+        const expensesResponse = await axios.get('https://mobile-assignment.onrender.com/expenses');
+        console.log(expensesResponse.data);
+        const modifiedEntries: Entry[] = expensesResponse.data.map((entry: Entry) => ({
+          ...entry,
+          totalAmount: -entry.totalAmount,
+        }));
+        console.log(modifiedEntries);
+
+        const budgetsResponse = await axios.get('https://mobile-assignment.onrender.com/budgets');
+        console.log(budgetsResponse.data);
+
+        const temp = [...budgetsResponse.data, ...modifiedEntries];
+        console.log(temp);
+        setEntries(temp);
+
+        Sentry.captureMessage("Expenses and Budgets fetched successfully");
+    } catch (err) {
+        Sentry.captureException(err);
+        console.log(err);
+    }
   };
   
   useEffect(() => {
-      getEntries();
+    getEntries();
   }, []);
 
   const chartData = [5.25, 5.42, 5.29, 5.38, 5.335];

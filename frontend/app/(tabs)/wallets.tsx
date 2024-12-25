@@ -4,6 +4,7 @@ import HeaderComponent from '@/components/HeaderComponent';
 import { ProgressBar } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CashSVG from '../../assets/icons/Cash.svg';
+import MomoSVG from '../../assets/icons/Momo.svg';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -28,6 +29,20 @@ export default function WalletsScreen() {
                 <View style={styles.walletInfo}>
                   <Text style={styles.walletName}>Cash</Text>
                   <Text style={styles.walletAmount}>900.00 USD</Text>
+                </View>
+                <TouchableOpacity style={styles.arrowButton}>
+                  <Text style={styles.arrowText}>→</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.inputContainer}>
+            <MomoSVG style={styles.icon} />
+            <View style={styles.rightContainer}>
+              <View style={styles.walletRow}>
+                <View style={styles.walletInfo}>
+                  <Text style={styles.walletName}>Momo</Text>
+                  <Text style={styles.walletAmount}>600.00 USD</Text>
                 </View>
                 <TouchableOpacity style={styles.arrowButton}>
                   <Text style={styles.arrowText}>→</Text>
