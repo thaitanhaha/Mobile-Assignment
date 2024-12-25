@@ -18,7 +18,6 @@ export default function BudgetTab() {
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
-  const [recognizedText, setRecognizedText] = useState('');
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,7 +82,10 @@ export default function BudgetTab() {
         base64Image = data.uri;
       }
       const text = await recognizeText(base64Image);
-      setRecognizedText(text);
+      const letters = text.match(/[a-zA-Z]/g) || [];
+      const numbers = text.match(/\d/g) || [];
+      setName(letters.join(''));
+      setAmount(numbers.join(''));
     } catch (error) {
       console.log('Error: ', error);
     }
@@ -297,7 +299,6 @@ export default function BudgetTab() {
             <>
               <View style={{alignItems: 'center'}}>
                 <Image source={{ uri: capturedPhoto }} style={styles.photo} />
-                <Text>Recognized {recognizedText}</Text>
               </View>
             </>
           )}
