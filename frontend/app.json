@@ -50,6 +50,14 @@
           "project": "react-native",
           "organization": "nguyen-thai-tan"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
       ]
     ],
     "experiments": {
