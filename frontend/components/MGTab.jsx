@@ -158,13 +158,13 @@ export default function BudgetTab() {
             display="inline"
             themeVariant="light"
             style={{
-              backgroundColor: '#FFFFFF', // Nền trắng
+              backgroundColor: '#FFFFFF', 
               borderRadius: 10,
               borderWidth: 1,
               padding: 10,
             }}
-            textColor="#000000" // Chữ đen
-            accentColor="#BA82F1" // Màu #BA82F1 cho các nút tương tác
+            textColor="#000000" 
+            accentColor="#BA82F1" 
             onChange={(event, selectedDate) => {
               if (selectedDate) {
                 setChosenDate(selectedDate);

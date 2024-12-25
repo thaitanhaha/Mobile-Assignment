@@ -5,9 +5,11 @@ import { ProgressBar } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CashSVG from '../../assets/icons/Cash.svg';
 import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function WalletsScreen() {
   return (
+   <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={styles.container}>
       <HeaderComponent />
 
@@ -59,6 +61,7 @@ export default function WalletsScreen() {
 
       </ScrollView>
     </View>
+   </GestureHandlerRootView>
   );
 }
 
