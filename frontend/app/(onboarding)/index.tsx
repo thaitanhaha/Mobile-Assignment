@@ -1,41 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RouteProp } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 
-type RootStackParamList = {
-  HomeScreen: undefined;
-  OnboardingScreen: undefined;
-};
-
-type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'OnboardingScreen'>;
-};
-
-const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
+const OnboardingScreen: React.FC = () => {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.replace('/(tabs)');
+    router.replace('../(login)');
   };
-  
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleIndexChanged = (index: React.SetStateAction<number>) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef<Swiper>(null);
+
+  const handleIndexChanged = (index: number) => {
     setActiveIndex(index);
+  };
+
+  const handleNextPress = () => {
+    if (swiperRef.current) {
+      swiperRef.current.scrollBy(1);
+    }
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <View style={styles.progressBarContainer}>
           <View style={[styles.progressBar, { width: `${(activeIndex + 1) / 3 * 100}%` }]} />
         </View>
       </View>
 
       <Swiper
+        ref={swiperRef}
         style={styles.wrapper}
         loop={false}
         onIndexChanged={handleIndexChanged}
@@ -47,32 +44,32 @@ const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.text}>
             Create an <Text style={{ color: '#aaa' }}>adaptive strategy</Text> based on your spending.
           </Text>
-          <TouchableOpacity style={styles.nextButton}>
+          <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
             <Text style={styles.nextText}>NEXT</Text>
           </TouchableOpacity>
         </View>
 
         {/* Page 2 */}
         <View style={styles.slide}>
-          <Image source={require('../../assets/images/onboarding2.png')} style={styles.image} resizeMode="contain"/>
+          <Image source={require('../../assets/images/onboarding2.png')} style={styles.image} resizeMode="contain" />
           <Text style={styles.title}>Stay Organized</Text>
           <Text style={styles.text}>
             Keep track of your tasks and projects seamlessly.
           </Text>
-          <TouchableOpacity style={styles.nextButton} onPress={handleGetStarted}>
+          <TouchableOpacity style={styles.nextButton} onPress={handleNextPress}>
             <Text style={styles.nextText}>NEXT</Text>
           </TouchableOpacity>
         </View>
 
         {/* Page 3 */}
         <View style={styles.slide}>
-          <Image source={require('../../assets/images/onboarding3.png')} style={styles.image} resizeMode="contain"/>
+          <Image source={require('../../assets/images/onboarding3.png')} style={styles.image} resizeMode="contain" />
           <Text style={styles.title}>Get Started</Text>
           <Text style={styles.text}>
             Join us and explore the possibilities.
           </Text>
           <TouchableOpacity style={styles.nextButton} onPress={handleGetStarted}>
-            <Text style={styles.nextText}>NEXT</Text>
+            <Text style={styles.nextText}>GET STARTED</Text>
           </TouchableOpacity>
         </View>
       </Swiper>

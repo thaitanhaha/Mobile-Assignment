@@ -1,69 +1,109 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
+import DoneSVG from '../../assets/icons/done.svg';
+import EditSVG from '../../assets/icons/edit.svg';
+import FullnameSVG from '../../assets/icons/full-name.svg';
+import CountrySVG from '../../assets/icons/country.svg';
+import JobSVG from '../../assets/icons/job.svg';
+
+interface Values {
+  fullName: string;
+  country: string;
+  job: string;
+}
+
+const fieldIconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
+  fullName: FullnameSVG,
+  country: CountrySVG,
+  job: JobSVG,
+};
 
 export default function SettingsScreen() {
+  const [editField, setEditField] = useState<keyof Values | null>(null);
+  const [values, setValues] = useState<Values>({
+    fullName: 'Corin Reveck',
+    country: 'Vietnam',
+    job: 'Alchemist',
+  });
+
+  const handleEditPress = (field: keyof Values) => {
+    setEditField(editField === field ? null : field);
+  };
+
+  const handleInputChange = (field: keyof Values, value: string) => {
+    setValues((prevValues) => ({ ...prevValues, [field]: value }));
+  };
+
+  const renderInputOrText = (field: keyof Values, label: string) => {
+    const isEditing = editField === field;
+    const IconComponent = fieldIconMap[field];
+
+    return (
+      <View style={styles.inputContainer}>
+        <IconComponent style={styles.icon} />
+        <View style={styles.rightContainer}>
+          <Text style={styles.inputLabel}>{label}</Text>
+          <View style={styles.inputRow}>
+            {isEditing ? (
+              <TextInput
+                style={styles.inputValue}
+                value={values[field]}
+                onChangeText={(text) => handleInputChange(field, text)}
+                autoFocus
+              />
+            ) : (
+              <Text style={styles.inputValue}>{values[field]}</Text>
+            )}
+            <TouchableOpacity onPress={() => handleEditPress(field)}>
+              {isEditing ? (
+                <DoneSVG style={styles.icon_edit} />
+              ) : (
+                <EditSVG style={styles.icon_edit} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const handleTouchablePressOutside = () => {
+    Keyboard.dismiss();
+    if (editField !== null) {
+      setEditField(null);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <HeaderComponent />
+    <TouchableWithoutFeedback onPress={handleTouchablePressOutside}>
+      <View style={styles.container}>
+        <HeaderComponent />
 
-      <View style={styles.profileContainer}>
-        <Text style={styles.profileTitle}>Profile</Text>
-        <Image
-          source={{ uri: 'https://www.shareicon.net/data/128x128/2016/09/15/829459_man_512x512.png' }}
-          style={styles.profileImage}
-        />
+        <View style={styles.profileContainer}>
+          <Text style={styles.profileTitle}>Profile</Text>
+          <Image
+            source={{ uri: 'https://www.shareicon.net/data/128x128/2016/09/15/829459_man_512x512.png' }}
+            style={styles.profileImage}
+          />
+        </View>
+
+        <ScrollView style={styles.formContainer}>
+          {renderInputOrText('fullName', 'Full name')}
+          {renderInputOrText('country', 'Country')}
+          {renderInputOrText('job', 'Job')}
+        </ScrollView>
       </View>
-
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-          <View style={styles.rightContainer}>
-            <Text style={styles.inputLabel}>Full name</Text>
-            <View style={styles.inputRow}>
-              <Text style={styles.inputValue}>Corin Reveck</Text>
-              <TouchableOpacity style={styles.arrowButton}>
-                <Text style={styles.arrowText}>→</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black', 
+    paddingTop: ('5%'),
   },
   profileContainer: {
     alignItems: 'center',
@@ -105,9 +145,13 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   icon: {
-    width: 30, 
-    height: 30, 
+    width: 40, 
+    height: 40, 
     marginRight: 10
+  },
+  icon_edit: {
+    width: 20, 
+    height: 20,
   },
   rightContainer: {
     flex: 1,
@@ -133,9 +177,5 @@ const styles = StyleSheet.create({
   },
   arrowButton: {
     paddingLeft: 10,
-  },
-  arrowText: {
-    fontSize: 20,
-    color: '#333',
   },
 });

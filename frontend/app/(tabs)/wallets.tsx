@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import { ProgressBar } from 'react-native-paper';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import CashSVG from '../../assets/icons/Cash.svg';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function WalletsScreen() {
   return (
@@ -13,11 +16,11 @@ export default function WalletsScreen() {
         <Text style={styles.totalBalance}>Total Balance</Text>
       </View>
 
-      <View style={styles.formContainer}>
+      <ScrollView style={styles.formContainer}>
         <Text style={styles.sectionTitle}>My Wallets</Text>
         <View>
           <View style={styles.inputContainer}>
-            <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+            <CashSVG style={styles.icon} />
             <View style={styles.rightContainer}>
               <View style={styles.walletRow}>
                 <View style={styles.walletInfo}>
@@ -54,7 +57,7 @@ export default function WalletsScreen() {
           </View>
         </View>
 
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -63,6 +66,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black', 
+    paddingTop: ('5%'),
   },
   walletsContainer: {
     alignItems: 'center',

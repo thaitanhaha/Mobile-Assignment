@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import BudgetTab from '@/components/BudgetTab';
 import ExpenseTab from '@/components/ExpenseTab';
 import MGTab from '@/components/MGTab';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function App() {
-  const [selectedTab, setSelectedTab] = useState('Budget');
+  const router = useRouter();
+  const { tab } = useLocalSearchParams();
+  const [selectedTab, setSelectedTab] = useState(tab || 'Budget');
+
+  useEffect(() => {
+    if (tab) {
+      setSelectedTab(tab);
+      router.replace('/add');
+    }
+  }, [tab]);
 
   let CurrentTabComponent;
   if (selectedTab === 'Budget') CurrentTabComponent = BudgetTab;
@@ -14,6 +26,7 @@ export default function App() {
   if (selectedTab === 'MG') CurrentTabComponent = MGTab;
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={styles.container}>
       <HeaderComponent />
       <View style={styles.tabsContainer}>
@@ -38,16 +51,18 @@ export default function App() {
       </View>
 
       <View style={styles.contentContainer}>
-        {CurrentTabComponent && <CurrentTabComponent />}
+        {CurrentTabComponent && <CurrentTabComponent/>}
       </View>
     </View>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black', 
+    backgroundColor: 'black',
+    paddingTop: wp('5%'),
   },
   tabsContainer: {
     flexDirection: 'row',

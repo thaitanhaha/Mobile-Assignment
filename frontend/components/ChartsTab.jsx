@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 function ChartsTab({ data }) {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View>
@@ -49,7 +50,7 @@ function ChartsTab({ data }) {
         <Text style={styles.footerText}>A month ago</Text>
         <Text style={styles.footerText}>Today</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
