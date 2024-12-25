@@ -7,8 +7,13 @@ import { CameraView, Camera, useCameraPermissions, CameraType } from 'expo-camer
 import { GOOGLE_VISION_API_KEY } from '@env';
 import * as FileSystem from 'expo-file-system';
 import * as Sentry from '@sentry/react-native';
+import axios from 'axios';
+import ErrorModal from "../components/ErrorModal";
+import { useRouter } from 'expo-router';
+
 
 export default function BudgetTab() {
+  const router = useRouter();
   const [showCamera, setShowCamera] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [permission, requestPermission] = useCameraPermissions();
@@ -16,26 +21,28 @@ export default function BudgetTab() {
   const [recognizedText, setRecognizedText] = useState('');
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   
   /* Category selection (C) */
   const [category, setCategory] = useState('General');
   const [openC, setOpenC] = useState(false);
   const [itemsC, setItemsC] = useState([
-    { label: 'Bills', value: '1' },
-    { label: 'Cash', value: '2' },
-    { label: 'Eating out', value: '3' },
-    { label: 'Entertainment', value: '4' },
-    { label: 'Expenses', value: '5' },
-    { label: 'Family', value: '6' },
-    { label: 'Groceries', value: '7' },
-    { label: 'Housing', value: '8' },
-    { label: 'Investments', value: '9' },
-    { label: 'Personal care', value: '10' },
-    { label: 'Salary', value: '11' },
-    { label: 'Savings', value: '12' },
-    { label: 'Shopping', value: '13' },
-    { label: 'Transport', value: '14' },
-    { label: 'Trips', value: '15' },
+    { label: 'Bills', value: 'Bills' },
+    { label: 'Cash', value: 'Cash' },
+    { label: 'Eating out', value: 'Eating out' },
+    { label: 'Entertainment', value: 'Entertainment' },
+    { label: 'Expenses', value: 'Expenses' },
+    { label: 'Family', value: 'Family' },
+    { label: 'Groceries', value: 'Groceries' },
+    { label: 'Housing', value: 'Housing' },
+    { label: 'Investments', value: 'Investments' },
+    { label: 'Personal care', value: 'Personal care' },
+    { label: 'Salary', value: 'Salary' },
+    { label: 'Savings', value: 'Savings' },
+    { label: 'Shopping', value: 'Shopping' },
+    { label: 'Transport', value: 'Transport' },
+    { label: 'Trips', value: 'Trips' },
   ]);
 
   /* Amount Section (A) */
@@ -115,7 +122,38 @@ export default function BudgetTab() {
       return final;
     }
   };
+
+  const handleSave = () => {
+    console.log(itemsC);
+    const expenseData = {
+      totalAmount: parseFloat(amount),
+      date: '2024-12-25',
+      category: category,
+      items: [{ name: name.trim(), price: parseFloat(amount) }],
+    };
   
+    if (!expenseData.totalAmount || !expenseData.items) {
+      setModalMessage("All fields are required!");
+      setModalVisible(true);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 1000);
+      return;
+    }
+  
+    axios
+      .post('https://mobile-assignment.onrender.com/expenses', expenseData)
+      .then((res) => {
+        console.log('Expense saved:', res.data);
+        Sentry.captureMessage("Expense saved successfully");
+        window.location.reload();
+        router.replace('/add?tab=Expense')
+      })
+      .catch((err) => {
+        console.error('Error saving expense:', err);
+        Sentry.captureException(err);
+      });
+  };
 
   if (!permission) {
     return <View />;
@@ -137,6 +175,11 @@ export default function BudgetTab() {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <ErrorModal
+        visible={modalVisible}
+        message={modalMessage}
+        onClose={() => setModalVisible(false)}
+      />
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 2, paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
@@ -258,6 +301,10 @@ export default function BudgetTab() {
               </View>
             </>
           )}
+
+          <TouchableOpacity style={styles.button_save} onPress={handleSave} >
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -338,6 +385,16 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#FCE849',
+    padding: 15,
+    borderRadius: 50,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+    width: 200,
+    alignSelf: 'center',
+  },
+  button_save: {
+    backgroundColor: '#9AEF5E',
     padding: 15,
     borderRadius: 50,
     alignItems: 'center',
