@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
+import axios from 'axios';
+import * as Sentry from '@sentry/react-native';
 
 export default function BudgetTab() {
   const [name, setName] = useState('');

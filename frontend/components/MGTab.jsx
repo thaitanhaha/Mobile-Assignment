@@ -3,29 +3,31 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { ScrollView } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
+import * as Sentry from '@sentry/react-native';
 
-export default function BudgetTab() {
+export default function MGSTab() {
   const [name, setName] = useState('');
 
   /* Category selection (C) */
   const [category, setCategory] = useState('General');
   const [openC, setOpenC] = useState(false);
   const [itemsC, setItemsC] = useState([
-    { label: 'Bills', value: '1' },
-    { label: 'Cash', value: '2' },
-    { label: 'Eating out', value: '3' },
-    { label: 'Entertainment', value: '4' },
-    { label: 'Expenses', value: '5' },
-    { label: 'Family', value: '6' },
-    { label: 'Groceries', value: '7' },
-    { label: 'Housing', value: '8' },
-    { label: 'Investments', value: '9' },
-    { label: 'Personal care', value: '10' },
-    { label: 'Salary', value: '11' },
-    { label: 'Savings', value: '12' },
-    { label: 'Shopping', value: '13' },
-    { label: 'Transport', value: '14' },
-    { label: 'Trips', value: '15' },
+    { label: 'Bills', value: 'Bills' },
+    { label: 'Cash', value: 'Cash' },
+    { label: 'Eating out', value: 'Eating out' },
+    { label: 'Entertainment', value: 'Entertainment' },
+    { label: 'Expenses', value: 'Expenses' },
+    { label: 'Family', value: 'Family' },
+    { label: 'Groceries', value: 'Groceries' },
+    { label: 'Housing', value: 'Housing' },
+    { label: 'Investments', value: 'Investments' },
+    { label: 'Personal care', value: 'Personal care' },
+    { label: 'Salary', value: 'Salary' },
+    { label: 'Savings', value: 'Savings' },
+    { label: 'Shopping', value: 'Shopping' },
+    { label: 'Transport', value: 'Transport' },
+    { label: 'Trips', value: 'Trips' },
   ]);
 
   /* Amount Section (A) */
@@ -37,14 +39,43 @@ export default function BudgetTab() {
     { label: 'USD', value: 'USD' },
   ]);
 
-  /* Margin/Goal */
   const [marginGoal, setMarginGoal] = useState('Margin');
-
-  /* Range */
   const [selectedRange, setSelectedRange] = useState('A month');
-
-  /* Date */
   const [chosenDate, setChosenDate] = useState(new Date());
+
+  const handleSave = () => {
+    const goalData = {
+      totalAmount: parseFloat(amount),
+      date: '2024-12-25',
+      category: category,
+      items: [{ name: name.trim(), price: parseFloat(amount) }],
+      purpose: 'Purpose',
+      range: selectedRange,
+      mgDate: '2025-5-5',
+    };
+  
+    if (!goalData.totalAmount || !goalData.items) {
+      setModalMessage("All fields are required!");
+      setModalVisible(true);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 1000);
+      return;
+    }
+  
+    axios
+      .post('https://mobile-assignment.onrender.com/mgs', goalData)
+      .then((res) => {
+        console.log('MGS saved:', res.data);
+        Sentry.captureMessage("MGS saved successfully");
+        window.location.reload();
+        router.replace('/add?tab=MG')
+      })
+      .catch((err) => {
+        console.error('Error saving goals:', err);
+        Sentry.captureException(err);
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -173,7 +204,7 @@ export default function BudgetTab() {
           />
           <Text style={[styles.note, {paddingTop: 15}]}>Pick a date.</Text>
           {/* Suggest Button */}
-          <TouchableOpacity style={styles.button} onPress={null}>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
             <Text style={styles.buttonText}>Suggest</Text>
           </TouchableOpacity>
         </View>

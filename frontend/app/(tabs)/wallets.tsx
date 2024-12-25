@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import { ProgressBar } from 'react-native-paper';
@@ -7,8 +7,28 @@ import CashSVG from '../../assets/icons/Cash.svg';
 import MomoSVG from '../../assets/icons/Momo.svg';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import axios from 'axios';
+import * as Sentry from "@sentry/react-native";
 
 export default function WalletsScreen() {
+  const [goals, setGoals] = useState([]); 
+
+  const getGoals = async () => {
+    try {
+        const goalsResponse = await axios.get('https://mobile-assignment.onrender.com/mgs');
+        console.log(goalsResponse.data);
+        setGoals(goalsResponse.data);
+        Sentry.captureMessage("Goals fetched successfully");
+    } catch (err) {
+        Sentry.captureException(err);
+        console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getGoals();
+  }, []);
+
   return (
    <GestureHandlerRootView style={{ flex: 1 }}>
     <View style={styles.container}>
@@ -30,9 +50,6 @@ export default function WalletsScreen() {
                   <Text style={styles.walletName}>Cash</Text>
                   <Text style={styles.walletAmount}>900.00 USD</Text>
                 </View>
-                <TouchableOpacity style={styles.arrowButton}>
-                  <Text style={styles.arrowText}>→</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -44,35 +61,31 @@ export default function WalletsScreen() {
                   <Text style={styles.walletName}>Momo</Text>
                   <Text style={styles.walletAmount}>600.00 USD</Text>
                 </View>
-                <TouchableOpacity style={styles.arrowButton}>
-                  <Text style={styles.arrowText}>→</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
         </View>
 
         <Text style={styles.sectionTitle}>Margin/Goals</Text>
-        <View>
-          <View style={styles.inputContainer}>
-            <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
-            <View style={styles.rightContainer}>
-              <View style={styles.walletRow}>
-                <View style={styles.goalInfo}>
-                  <Text style={styles.walletName}>Food</Text>
-                  <ProgressBar progress={0.8} color="#4CAF50" style={styles.progressBar} />
-                  <View style={styles.goalDetail}>
-                    <Text style={styles.goalPercent}>80%</Text>
-                    <Text style={styles.goalPercent}>$100 left</Text>
+        <ScrollView style={{ paddingVertical: 8 }}>
+          {goals.map((goal) => (
+            <View key={goal.id} style={styles.inputContainer}>
+              <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
+              <View style={styles.rightContainer}>
+                <View style={styles.walletRow}>
+                  <View style={styles.goalInfo}>
+                    <Text style={styles.walletName}>{goal.category}</Text>
+                    <ProgressBar progress={0.8} color="#4CAF50" style={styles.progressBar} />
+                    <View style={styles.goalDetail}>
+                      <Text style={styles.goalPercent}>80%</Text>
+                      <Text style={styles.goalPercent}>$100 left</Text>
+                    </View>
                   </View>
-                </View> 
-                <TouchableOpacity style={styles.arrowButton}>
-                  <Text style={styles.arrowText}>→</Text>
-                </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
+          ))}
+        </ScrollView>
 
       </ScrollView>
     </View>
