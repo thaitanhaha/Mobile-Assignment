@@ -27,6 +27,13 @@ export class ExpensesService {
     return updatedExpense;
   }
   
+  async findAll(): Promise<Expense[]> {
+    const expenses = await this.expenseModel.find().exec();
+    if (!expenses || expenses.length === 0) {
+      throw new NotFoundException(`Expenses not found`);
+    }
+    return expenses;
+  }
 
   // Tìm một Expense theo ID
   async findOne(id: string): Promise<Expense> {

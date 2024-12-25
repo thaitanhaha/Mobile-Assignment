@@ -95,6 +95,49 @@ export class ExpensesController {
     return this.expensesService.findOne(id);
   }
 
+  @Get()
+  @ApiOperation({
+    summary: 'Get all expense records',
+    description: 'Retrieve all expense records stored in the database.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Expense records retrieved successfully.',
+    schema: {
+      type: 'array', // Vì trả về danh sách, nên type là array
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', example: '123456789' },
+          totalAmount: { type: 'number', example: 100.5 },
+          date: { type: 'string', format: 'date', example: '2024-12-03' },
+          category: { type: 'string', example: 'Food' },
+          items: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: { type: 'string', example: 'Pizza' },
+                price: { type: 'number', example: 12.5 },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No expense records found.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+  })
+  async getAllExpense() {
+    return this.expensesService.findAll();
+  }
+
   @Get('/chart')
   @ApiOperation({
     summary: 'Get spending data for chart visualization',

@@ -10,10 +10,10 @@ function EntriesTab({ entries }) {
           <View style={styles.rightContainer}>
             <View style={styles.entryRow}>
               <View style={styles.entryInfo}>
-                <Text style={styles.entryName}>{entry.name}</Text>
-                <Text style={styles.entryAmount}>{entry.amount > 0 ? '+' : ''}{entry.amount} USD</Text>
+                <Text style={styles.entryName}>{entry.items[0].name}</Text>
+                <Text style={styles.entryAmount}>{entry.totalAmount > 0 ? '+' : ''}{entry.totalAmount} USD</Text>
               </View>
-              <Text>{entry.type} - {entry.date}</Text>
+              <Text>{entry.category} - {entry.date}</Text>
             </View>
           </View>
         </View>

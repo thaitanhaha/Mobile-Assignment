@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import EntriesTab from '@/components//EntriesTab';
@@ -6,23 +6,45 @@ import ChartsTab from '@/components/ChartsTab';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TotalSavingSVG from '../../assets/icons/total_saving.svg';
 import PlusSVG from '../../assets/icons/plus.svg';
+import axios from 'axios';
+import * as Sentry from "@sentry/react-native";
+
+
 
 export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
-
-  const entries = [
-    { id: 1, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
-    { id: 2, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 3, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 4, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 5, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
-    { id: 11, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
-    { id: 22, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 33, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 44, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
-    { id: 55, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
-  ];
+  const [entries, setEntries] = useState([]);
+  
+  const getEntries = () => {
+      axios.get('http://localhost:3000/expenses')
+          .then((res) => {
+                console.log(res.data); // Kiểm tra cấu trúc dữ liệu
+                setEntries(res.data);
+              Sentry.captureMessage("Entries fetched successfully");
+              setEntries(res.data);
+          })
+          .catch((err) => {
+              Sentry.captureException(err);
+              console.log(err);
+          });
+  };
+  
+  useEffect(() => {
+      getEntries();
+  }, []);
+//   const entries = [
+//     { id: 1, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
+//     { id: 2, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 3, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 4, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 5, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
+//     { id: 11, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
+//     { id: 22, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 33, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 44, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
+//     { id: 55, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
+//   ];
 
   const chartData = [5.25, 5.42, 5.29, 5.38, 5.335];
 
