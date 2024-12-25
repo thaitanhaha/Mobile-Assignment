@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { CameraView, Camera, useCameraPermissions, CameraType } from 'expo-camera';
 import { GOOGLE_VISION_API_KEY } from '@env';
-import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 import * as Sentry from '@sentry/react-native';
 
 export default function BudgetTab() {
@@ -66,7 +66,16 @@ export default function BudgetTab() {
       const data = await camera.takePictureAsync();
       setCapturedPhoto(data.uri);
       setShowCamera(false);
-      const text = await recognizeText(data.uri);
+      let base64Image = '';
+      if (data.uri.includes('.jpg') || data.uri.includes('.png')) {
+        base64Image = await FileSystem.readAsStringAsync(data.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+      }
+      else {
+        base64Image = data.uri;
+      }
+      const text = await recognizeText(base64Image);
       setRecognizedText(text);
     } catch (error) {
       console.log('Error: ', error);
@@ -74,7 +83,8 @@ export default function BudgetTab() {
   };
 
   const recognizeText = async (imageUri) => {
-    var final = 'ERROR'
+    let final = 'ERROR';
+    setLoading(true);
     try {
       const base64Content = imageUri.replace(/^data:image\/\w+;base64,/, '');
       const url = `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_VISION_API_KEY}`;
@@ -86,20 +96,26 @@ export default function BudgetTab() {
           },
         ],
       };
-      const response = await axios.post(url, requestBody, {
+  
+      const response = await fetch(url, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
       });
-      const detections = response.data.responses[0].textAnnotations;
+  
+      const data = await response.json();
+      const detections = data.responses[0].textAnnotations;
       final = detections ? detections[0].description : 'No text detected';
     } catch (error) {
       console.error('Error with Google Vision API:', error);
       Sentry.captureException(error);
       throw error;
-    }
-    finally {
+    } finally {
+      setLoading(false);
       return final;
     }
   };
+  
 
   if (!permission) {
     return <View />;

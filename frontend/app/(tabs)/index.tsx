@@ -17,7 +17,7 @@ export default function HomeScreen() {
   const [entries, setEntries] = useState([]);
   
   const getEntries = () => {
-      axios.get('http://localhost:3000/expenses')
+      axios.get('https://mobile-assignment.onrender.com/expenses')
           .then((res) => {
                 console.log(res.data); // Kiểm tra cấu trúc dữ liệu
                 setEntries(res.data);
@@ -33,18 +33,6 @@ export default function HomeScreen() {
   useEffect(() => {
       getEntries();
   }, []);
-//   const entries = [
-//     { id: 1, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
-//     { id: 2, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 3, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 4, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 5, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
-//     { id: 11, name: 'The Flob Album', amount: -10.0, type: 'Paid', date: 'Today' },
-//     { id: 22, name: 'Get Paid', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 33, name: 'Get Taxes Back', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 44, name: 'Stolen Money hehe', amount: 5.0, type: 'Added', date: 'Today' },
-//     { id: 55, name: 'Fast burger', amount: -10.0, type: 'Paid', date: 'Today' },
-//   ];
 
   const chartData = [5.25, 5.42, 5.29, 5.38, 5.335];
 
