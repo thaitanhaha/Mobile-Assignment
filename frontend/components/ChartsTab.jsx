@@ -2,55 +2,58 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 function ChartsTab({ data }) {
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>Traveling</Text>
-          <Text style={styles.subtitle}>November</Text>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.title}>Traveling</Text>
+            <Text style={styles.subtitle}>November</Text>
+          </View>
+          <View style={styles.tag}>
+            <Text style={styles.tagText}>Monthly</Text>
+          </View>
         </View>
-        <View style={styles.tag}>
-          <Text style={styles.tagText}>Monthly</Text>
-        </View>
-      </View>
 
-      <LineChart
-        data={{
-          datasets: [
-            {
-              data: data,
+        <LineChart
+          data={{
+            datasets: [
+              {
+                data: data,
+              },
+            ],
+          }}
+          width={screenWidth - 40}
+          height={200}
+          chartConfig={{
+            backgroundColor: '#f4f6f5',
+            backgroundGradientFrom: '#f4f6f5',
+            backgroundGradientTo: '#f4f6f5',
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            propsForDots: {
+              r: '0',
             },
-          ],
-        }}
-        width={screenWidth - 40}
-        height={200}
-        chartConfig={{
-          backgroundColor: '#f4f6f5',
-          backgroundGradientFrom: '#f4f6f5',
-          backgroundGradientTo: '#f4f6f5',
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          propsForDots: {
-            r: '0',
-          },
-        }}
-        withHorizontalLines={false}
-        withVerticalLines={false}
-        bezier
-        withDots={false}
-        style={styles.chartStyle}
-      />
+          }}
+          withHorizontalLines={false}
+          withVerticalLines={false}
+          bezier
+          withDots={false}
+          style={styles.chartStyle}
+        />
 
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>A month ago</Text>
-        <Text style={styles.footerText}>Today</Text>
-      </View>
-    </ScrollView>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>A month ago</Text>
+          <Text style={styles.footerText}>Today</Text>
+        </View>
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
 

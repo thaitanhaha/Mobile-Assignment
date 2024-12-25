@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
-import DatePicker from 'react-native-modern-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function BudgetTab() {
   const [name, setName] = useState('');
-  
+
   /* Category selection (C) */
   const [category, setCategory] = useState('General');
   const [openC, setOpenC] = useState(false);
@@ -38,20 +37,14 @@ export default function BudgetTab() {
     { label: 'USD', value: 'USD' },
   ]);
 
-  /* Method */
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const handleSelect = (method) => {
-    setSelectedMethod(method === selectedMethod ? null : method);
-  };
-
   /* Margin/Goal */
   const [marginGoal, setMarginGoal] = useState('Margin');
 
   /* Range */
   const [selectedRange, setSelectedRange] = useState('A month');
+
   /* Date */
-  
-  const [selectedDate, setSelectedDate] = useState('');
+  const [chosenDate, setChosenDate] = useState(new Date());
 
   return (
     <KeyboardAvoidingView
@@ -156,25 +149,29 @@ export default function BudgetTab() {
             ))}
           </View>
           <Text style={styles.note}>Choose a range to set a limit.</Text>
+
           {/* Date Picker */}
           <Text style={styles.label}>Target Date</Text>
-          <DatePicker
-            options={{
-              backgroundColor: '#FFFFFF',
-              textHeaderColor: '#BA82F1',
-              textDefaultColor: '#000',
-              selectedTextColor: '#000',
-              mainColor: '#BA82F1',
-              textSecondaryColor: '#BA82F1',
-              borderColor: 'rgba(122, 146, 165, 0.1)',
+          <DateTimePicker
+            value={chosenDate}
+            mode="date"
+            display="inline"
+            themeVariant="light"
+            style={{
+              backgroundColor: '#FFFFFF', 
+              borderRadius: 10,
+              borderWidth: 1,
+              padding: 10,
             }}
-            current="2024-12-23"
-            selected = {Date()}
-            mode="calendar"
-            minuteInterval={30}
-            style={{ borderRadius: 10 }}
-            onSelectedChange={date => setSelectedDate(date)}
+            textColor="#000000" 
+            accentColor="#BA82F1" 
+            onChange={(event, selectedDate) => {
+              if (selectedDate) {
+                setChosenDate(selectedDate);
+              }
+            }}
           />
+          <Text style={[styles.note, {paddingTop: 15}]}>Pick a date.</Text>
           {/* Suggest Button */}
           <TouchableOpacity style={styles.button} onPress={null}>
             <Text style={styles.buttonText}>Suggest</Text>
@@ -223,6 +220,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#777',
     marginBottom: 25,
+    paddingTop: 5,
   },
   button: {
     backgroundColor: '#BA82F1',
@@ -231,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 10,
-    width: 120,
+    width: 150,
     alignSelf: 'center',
   },
   buttonText: {
