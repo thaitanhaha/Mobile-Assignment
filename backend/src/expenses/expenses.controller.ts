@@ -36,8 +36,19 @@ export class ExpensesController {
     status: 500,
     description: 'Internal server error.',
   })
-  create(@Body() createExpenseDto: CreateExpenseDto) {
+  async create(@Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.create(createExpenseDto);
+  }
+
+  @Put(':expenseId')
+  @ApiOperation({ summary: 'Update an expense record' })
+  @ApiResponse({ status: 200, description: 'Expense record updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Expense record not found.' })
+  async update(
+    @Param('expenseId') id: string,
+    @Body() updateExpenseDto: UpdateExpenseDto,
+  ) {
+    return this.expensesService.update(id, updateExpenseDto);
   }
 
   @Get(':expenseId')
@@ -80,7 +91,7 @@ export class ExpensesController {
     description: 'Unique identifier for the expense record.',
     example: '123456789', // Example of the ID parameter
   })
-  getExpense(@Param('expenseId') id: string) {
+  async getExpense(@Param('expenseId') id: string) {
     return this.expensesService.findOne(id);
   }
 
@@ -144,7 +155,7 @@ export class ExpensesController {
     enum: ['month', 'category'],  // Defines the valid values for groupBy
     example: 'month',
   })
-  getChart(@Query() query: GetChartQueryDto) {
+  async getChart(@Query() query: GetChartQueryDto) {
     const { startDate, endDate, groupBy } = query;
     return this.expensesService.getChartData(startDate, endDate, groupBy);
   }
@@ -175,7 +186,7 @@ export class ExpensesController {
     description: 'Unique identifier for the expense record.',
     example: '123456789', // Example of the ID parameter
   })
-  remove(@Param('expenseId') id: string) {
+  async remove(@Param('expenseId') id: string) {
     return this.expensesService.remove(id);
   }
 }
