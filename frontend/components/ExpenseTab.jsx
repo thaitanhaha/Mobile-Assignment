@@ -4,7 +4,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { CameraView, Camera, useCameraPermissions, CameraType } from 'expo-camera';
-import { GOOGLE_VISION_API_KEY } from '@env';
 import * as FileSystem from 'expo-file-system';
 import * as Sentry from '@sentry/react-native';
 import axios from 'axios';
@@ -98,7 +97,7 @@ export default function BudgetTab() {
     setLoading(true);
     try {
       const base64Content = imageUri.replace(/^data:image\/\w+;base64,/, '');
-      const url = `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_VISION_API_KEY}`;
+      const url = `https://vision.googleapis.com/v1/images:annotate?key=${process.env.EXPO_PUBLIC_GOOGLE_VISION_API_KEY}`;
       const requestBody = {
         requests: [
           {
