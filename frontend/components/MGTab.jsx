@@ -80,9 +80,7 @@ export default function MGSTab() {
         console.log('MGS saved:', res.data);
         Sentry.captureMessage("MGS saved successfully");
         setTimeout(() => {
-          handleSuccess()
-          window.location.reload();
-          router.replace('/add?tab=MG')
+          handleSuccess();
         }, 1000);
       })
       .catch((err) => {
@@ -95,6 +93,14 @@ export default function MGSTab() {
     setSuccessModalVisible(true);
     setTimeout(() => {
       setSuccessModalVisible(false);
+      setAmount('');
+      setName('');
+      setCategory('General');
+      setCurrency('PLN');
+      setSelectedMethod(null);
+      setMarginGoal('Margin');
+      setSelectedRange('A month');
+      setChosenDate(new Date());
     }, 1000);
   };
 

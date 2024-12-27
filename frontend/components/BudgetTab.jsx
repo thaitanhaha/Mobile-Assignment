@@ -4,7 +4,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
-import * as Sentry from '@sentry/react-native';
 import ErrorModal from "../components/ErrorModal";
 import SuccessModal from "../components/SuccessModal";
 import { useRouter } from 'expo-router';
@@ -73,16 +72,12 @@ export default function BudgetTab() {
       .post('https://mobile-assignment.onrender.com/budgets', budgetData)
       .then((res) => {
         console.log('Budget saved:', res.data);
-        Sentry.captureMessage("Budget saved successfully");
         setTimeout(() => {
-          handleSuccess()
-          window.location.reload();
-          router.replace('/add?tab=Budget')
+          handleSuccess();
         }, 1000);
       })
       .catch((err) => {
         console.error('Error saving budget:', err);
-        Sentry.captureException(err);
       });
   };
 
@@ -90,6 +85,11 @@ export default function BudgetTab() {
     setSuccessModalVisible(true);
     setTimeout(() => {
       setSuccessModalVisible(false);
+      setAmount('');
+      setName('');
+      setCategory('General');
+      setCurrency('PLN');
+      setSelectedMethod(null);
     }, 1000);
   };
 

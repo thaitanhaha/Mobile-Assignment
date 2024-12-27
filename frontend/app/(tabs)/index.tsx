@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import EntriesTab from '@/components//EntriesTab';
@@ -45,10 +46,12 @@ export default function HomeScreen() {
         console.log(err);
     }
   };
-  
-  useEffect(() => {
-    getEntries();
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getEntries();
+    }, [])
+  );
 
   const chartData = [5.25, 5.42, 5.29, 5.38, 5.335];
 

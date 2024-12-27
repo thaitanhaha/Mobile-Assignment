@@ -171,8 +171,6 @@ export default function BudgetTab() {
         console.log('Expense saved:', res.data);
         setTimeout(() => {
           handleSuccess()
-          window.location.reload();
-          router.replace('/add?tab=Expense')
         }, 1000);
       })
       .catch((err) => {
@@ -195,6 +193,11 @@ export default function BudgetTab() {
     setSuccessModalVisible(true);
     setTimeout(() => {
       setSuccessModalVisible(false);
+      setAmount('');
+      setName('');
+      setCategory('General');
+      setCurrency('PLN');
+      setSelectedMethod(null);
     }, 1000);
   };
 
