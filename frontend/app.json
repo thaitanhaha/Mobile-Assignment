@@ -52,7 +52,8 @@
           "project": "react-native",
           "organization": "nguyen-thai-tan"
         }
-      ]
+      ],
+      "sentry-expo"
     ],
     "experiments": {
       "typedRoutes": true
