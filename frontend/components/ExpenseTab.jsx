@@ -5,11 +5,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { CameraView, Camera, useCameraPermissions, CameraType } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
-import * as Sentry from '@sentry/react-native';
 import axios from 'axios';
 import ErrorModal from "../components/ErrorModal";
 import SuccessModal from "../components/SuccessModal";
 import { useRouter } from 'expo-router';
+import { classifyText } from '../hooks/openAI';
 
 
 export default function BudgetTab() {
@@ -115,14 +115,35 @@ export default function BudgetTab() {
   
       const data = await response.json();
       const detections = data.responses[0].textAnnotations;
-      final = detections ? detections[0].description : 'No text detected';
+      if (detections) {
+        final = detections[0].description;
+        setTimeout(() => {
+          handleClassifyThrottled(detections[0].description);
+        }, 1000);
+      } else {
+        final = 'No text detected';
+      }
     } catch (error) {
       console.error('Error with Google Vision API:', error);
-      Sentry.captureException(error);
       throw error;
     } finally {
       setLoading(false);
       return final;
+    }
+  };
+
+  let isRequestInProgress = false;
+
+  const handleClassifyThrottled = async (text) => {
+    if (isRequestInProgress) return;
+
+    isRequestInProgress = true;
+    try {
+      await handleClassify(text);
+    } catch (error) {
+      console.error('Error in classification:', error);
+    } finally {
+      isRequestInProgress = false;
     }
   };
 
@@ -148,7 +169,6 @@ export default function BudgetTab() {
       .post('https://mobile-assignment.onrender.com/expenses', expenseData)
       .then((res) => {
         console.log('Expense saved:', res.data);
-        Sentry.captureMessage("Expense saved successfully");
         setTimeout(() => {
           handleSuccess()
           window.location.reload();
@@ -157,8 +177,18 @@ export default function BudgetTab() {
       })
       .catch((err) => {
         console.error('Error saving expense:', err);
-        Sentry.captureException(err);
       });
+  };
+
+  const handleClassify = async () => {
+    try {
+      const result = await classifyText(name);
+      console.log(result);
+      setCategory(result);
+    } catch (error) {
+      console.error('Classification failed:', error);
+      setCategory('Error classifying input');
+    }
   };
 
   const handleSuccess = () => {
