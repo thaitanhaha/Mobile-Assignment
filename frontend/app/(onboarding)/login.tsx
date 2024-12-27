@@ -57,7 +57,7 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    router.replace('/(login)/register');
+    router.replace('../register');
   };
 
   const handleGoogle = () => {

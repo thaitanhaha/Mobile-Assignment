@@ -43,7 +43,7 @@ export default function RegisterScreen() {
 
   const handleBack = () => {
     if (step === 1) {
-      router.replace('/(login)')
+      router.replace('../login')
     } else {
       setStep(step - 1)
     }
