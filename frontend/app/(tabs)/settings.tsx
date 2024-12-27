@@ -7,6 +7,7 @@ import FullnameSVG from '../../assets/icons/full-name.svg';
 import CountrySVG from '../../assets/icons/country.svg';
 import JobSVG from '../../assets/icons/job.svg';
 import EditModal from '../../components/EditModal';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 interface Values {
   fullName: string;
@@ -29,6 +30,8 @@ export default function SettingsScreen() {
   });
   const [tempValue, setTempValue] = useState<string | null>(null);
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const [openCountry, setOpenCountry] = useState(false);
+  const [openJob, setOpenJob] = useState(false);
 
   const handleEditPress = (field: keyof Values) => {
     if (editField === field) {
@@ -63,6 +66,19 @@ export default function SettingsScreen() {
     const isEditing = editField === field;
     const IconComponent = fieldIconMap[field];
 
+    const countryItems = [
+      { label: 'China', value: 'China' },
+      { label: 'USA', value: 'USA' },
+      { label: 'Vietnam', value: 'Vietnam' },
+    ];
+    
+    const jobItems = [
+      { label: 'Alchemist', value: 'Alchemist' },
+      { label: 'Developer', value: 'Developer' },
+      { label: 'Designer', value: 'Designer' },
+      { label: 'Student', value: 'Student' },
+    ];
+
     return (
       <View style={styles.inputContainer}>
         <IconComponent style={styles.icon} />
@@ -70,12 +86,38 @@ export default function SettingsScreen() {
           <Text style={styles.inputLabel}>{label}</Text>
           <View style={styles.inputRow}>
             {isEditing ? (
-              <TextInput
-                style={styles.inputValue}
-                value={tempValue || ''}
-                onChangeText={(text) => handleInputChange(field, text)}
-                autoFocus
-              />
+              field === 'country' ? (
+                <DropDownPicker
+                  open={openCountry}
+                  value={tempValue || values.country}
+                  items={countryItems}
+                  setOpen={setOpenCountry}
+                  setValue={setTempValue}
+                  style={styles.dropContainer}
+                  dropDownContainerStyle={styles.dropdownList}
+                  dropDownDirection="TOP"
+                  listMode="SCROLLVIEW"
+                />
+              ) : field === 'job' ? (
+                <DropDownPicker
+                  open={openJob}
+                  value={tempValue || values.job}
+                  items={jobItems}
+                  setOpen={setOpenJob}
+                  setValue={setTempValue}
+                  style={styles.dropContainer}
+                  dropDownContainerStyle={styles.dropdownList}
+                  dropDownDirection="TOP"
+                  listMode="SCROLLVIEW"
+                />
+              ) : (
+                <TextInput
+                  style={styles.dropContainer}
+                  value={tempValue || ''}
+                  onChangeText={(text) => handleInputChange(field, text)}
+                  autoFocus
+                />
+              )
             ) : (
               <Text style={styles.inputValue}>{values[field]}</Text>
             )}
@@ -216,7 +258,26 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     fontWeight: 'bold',
   },
-  arrowButton: {
+  dropContainer: {
+    flex: 1,
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
     paddingLeft: 10,
+    paddingRight: 10,
+    paddingVertical: 8,
+    borderRadius: 16,
+    backgroundColor: '#f9f9f9',
+    textAlignVertical: 'center',
+    fontWeight: 'bold',
+  },
+  dropdownList: {
+    maxHeight: 200,
+    overflow: 'hidden',
+    backgroundColor: '#fafafa',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 16,
+    zIndex: 10,
   },
 });
