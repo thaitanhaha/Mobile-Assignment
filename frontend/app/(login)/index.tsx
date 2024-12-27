@@ -16,6 +16,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
   const router = useRouter();
@@ -59,8 +60,20 @@ export default function LoginScreen() {
     router.replace('/(login)/register');
   };
 
+  const handleGoogle = () => {
+    setErrorModalVisible(true);
+    setTimeout(() => {
+      setErrorModalVisible(false);
+    }, 1000);
+  }
+
   return (
     <View style={styles.container}>
+      <ErrorModal
+        visible={errorModalVisible}
+        message="Feature will be updated soon!"
+        onClose={() => setErrorModalVisible(false)}
+      />
       <ErrorModal
         visible={modalVisible}
         message={modalMessage}
@@ -99,14 +112,14 @@ export default function LoginScreen() {
           <PasswordHideSVG style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleGoogle}>
         <Text style={styles.forgotPassword}>forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.nextButton} onPress={handleLogin} disabled={isLoading}>
         <Text style={styles.nextText}>{isLoading ? "LOADING..." : "NEXT"}</Text>
       </TouchableOpacity>
       <Text style={styles.orText}>or</Text>
-      <TouchableOpacity style={styles.googleButton}>
+      <TouchableOpacity style={styles.googleButton} onPress={handleGoogle}>
         <GoogleSVG style={{ width: 25, height: 25, marginRight: 10 }} />
         <Text style={styles.googleText}>CONTINUE WITH GOOGLE</Text>
       </TouchableOpacity>

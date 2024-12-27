@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import TotalSavingSVG from '../../assets/icons/total_saving.svg';
 import PlusSVG from '../../assets/icons/plus.svg';
 import axios from 'axios';
+import ErrorModal from '../../components/ErrorModal';
 
 type Entry = {
   _id: string;
@@ -21,6 +22,7 @@ export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   const handleDeleteEntry = (entryId: string) => {
     setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== entryId));
@@ -70,6 +72,13 @@ export default function HomeScreen() {
     }
   };
 
+  const handleFeature = () => {
+    setErrorModalVisible(true);
+    setTimeout(() => {
+      setErrorModalVisible(false);
+    }, 1000);
+  }
+
   let CurrentTabComponent = null;
   if (selectedTab === 'Entries') CurrentTabComponent = 
     <EntriesTab entries={entries} showDelete={!showCards} onDeleteEntry={handleDeleteEntry} />;
@@ -77,23 +86,28 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <ErrorModal
+        visible={errorModalVisible}
+        message="Feature will be updated soon!"
+        onClose={() => setErrorModalVisible(false)}
+      />
       <HeaderComponent />
 
       {showCards ? (
         <View style={styles.content}>
           <Text style={styles.title}>Happy saving!</Text>
           <View style={styles.selections}>
-            <TouchableOpacity style={styles.selection}>
+            <TouchableOpacity style={styles.selection} onPress={handleFeature}>
               <Text style={styles.selectionText}>All</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.selection}>
+            <TouchableOpacity style={styles.selection} onPress={handleFeature}>
               <Text style={styles.selectionText}>Favourite</Text>
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.cards}>
               <View style={[styles.card, { backgroundColor: '#BAEC97' }]}>
-                <TouchableOpacity style={styles.plus}>
+                <TouchableOpacity style={styles.plus} onPress={handleFeature}>
                   <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>
@@ -102,7 +116,7 @@ export default function HomeScreen() {
                 </View>
               </View>
               <View style={[styles.card, { backgroundColor: '#E7FD72' }]}>
-                <TouchableOpacity style={styles.plus}>
+                <TouchableOpacity style={styles.plus} onPress={handleFeature}>
                   <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>
@@ -111,7 +125,7 @@ export default function HomeScreen() {
                 </View>
               </View>
               <View style={[styles.card, { backgroundColor: '#FFD700' }]}>
-                <TouchableOpacity style={styles.plus}>
+                <TouchableOpacity style={styles.plus} onPress={handleFeature}>
                   <PlusSVG />
                 </TouchableOpacity>
                 <View style={{ marginLeft: 16, marginBottom: 16 }}>

@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "reac
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
+import ErrorModal from '../../components/ErrorModal';
 import LeftArrowSVG from '../../assets/icons/leftarrow.svg';
 import PasswordHideSVG from '../../assets/icons/password_hide.svg';
 
@@ -13,6 +14,7 @@ export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [otp, setOtp] = useState("");
 
   const handleNext = () => {
@@ -27,8 +29,10 @@ export default function RegisterScreen() {
         setStep(4)
       }
     } else if (step === 4) {
-      // submit form
-      router.replace('/(tabs)')
+      setErrorModalVisible(true);
+      setTimeout(() => {
+        setErrorModalVisible(false);
+      }, 1000);
       setStep(1)
     }
   }
@@ -47,6 +51,12 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
+      <ErrorModal
+        visible={errorModalVisible}
+        message="Feature will be updated soon!"
+        onClose={() => setErrorModalVisible(false)}
+      />
+
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
         <LeftArrowSVG/>
       </TouchableOpacity>
