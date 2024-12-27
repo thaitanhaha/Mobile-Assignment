@@ -50,6 +50,9 @@ export default function MGSTab() {
   const [selectedRange, setSelectedRange] = useState('A month');
   const [chosenDate, setChosenDate] = useState(new Date());
 
+  const handleSuggestion = () => {
+    setAmount(100);
+  }
 
   const handleSave = () => {
     const goalData = {
@@ -232,8 +235,11 @@ export default function MGSTab() {
           />
           <Text style={[styles.note, {paddingTop: 15}]}>Pick a date.</Text>
           {/* Suggest Button */}
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <TouchableOpacity style={styles.button} onPress={handleSuggestion}>
             <Text style={styles.buttonText}>Suggest</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button_save} onPress={handleSave} >
+            <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -288,7 +294,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 10,
-    width: 150,
+    width: 200,
     alignSelf: 'center',
   },
   buttonText: {
@@ -320,5 +326,15 @@ const styles = StyleSheet.create({
   },
   activeToggleButtonText: {
     color: '#000000',
+  },
+  button_save: {
+    backgroundColor: '#9AEF5E',
+    padding: 15,
+    borderRadius: 50,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+    width: 200,
+    alignSelf: 'center',
   },
 });
