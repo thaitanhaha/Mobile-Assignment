@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, Modal, Button } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import DoneSVG from '../../assets/icons/done.svg';
 import EditSVG from '../../assets/icons/edit.svg';
 import FullnameSVG from '../../assets/icons/full-name.svg';
 import CountrySVG from '../../assets/icons/country.svg';
 import JobSVG from '../../assets/icons/job.svg';
+import EditModal from '../../components/EditModal';
 
 interface Values {
   fullName: string;
@@ -26,13 +27,36 @@ export default function SettingsScreen() {
     country: 'Vietnam',
     job: 'Alchemist',
   });
+  const [tempValue, setTempValue] = useState<string | null>(null);
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const handleEditPress = (field: keyof Values) => {
-    setEditField(editField === field ? null : field);
+    if (editField === field) {
+      setTempValue(null);
+      setEditField(null);
+    } else {
+      setTempValue(values[field]);
+      setEditField(field);
+    }
   };
 
   const handleInputChange = (field: keyof Values, value: string) => {
-    setValues((prevValues) => ({ ...prevValues, [field]: value }));
+    setTempValue(value);
+  };
+
+  const handleConfirmEdit = () => {
+    if (editField) {
+      setValues((prevValues) => ({ ...prevValues, [editField]: tempValue || prevValues[editField] }));
+    }
+    setEditField(null);
+    setTempValue(null);
+    setConfirmModalVisible(false);
+  };
+
+  const handleCancelEdit = () => {
+    setTempValue(null);
+    setEditField(null);
+    setConfirmModalVisible(false);
   };
 
   const renderInputOrText = (field: keyof Values, label: string) => {
@@ -48,14 +72,22 @@ export default function SettingsScreen() {
             {isEditing ? (
               <TextInput
                 style={styles.inputValue}
-                value={values[field]}
+                value={tempValue || ''}
                 onChangeText={(text) => handleInputChange(field, text)}
                 autoFocus
               />
             ) : (
               <Text style={styles.inputValue}>{values[field]}</Text>
             )}
-            <TouchableOpacity onPress={() => handleEditPress(field)}>
+            <TouchableOpacity
+              onPress={() => {
+                if (isEditing) {
+                  setConfirmModalVisible(true);
+                } else {
+                  handleEditPress(field);
+                }
+              }}
+            >
               {isEditing ? (
                 <DoneSVG style={styles.icon_edit} />
               ) : (
@@ -72,6 +104,7 @@ export default function SettingsScreen() {
     Keyboard.dismiss();
     if (editField !== null) {
       setEditField(null);
+      setTempValue(null);
     }
   };
 
@@ -93,10 +126,18 @@ export default function SettingsScreen() {
           {renderInputOrText('country', 'Country')}
           {renderInputOrText('job', 'Job')}
         </ScrollView>
+
+        <EditModal
+          visible={confirmModalVisible}
+          thingToEdit={editField}
+          onConfirmEdit={handleConfirmEdit}
+          onCancelEdit={handleCancelEdit}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
 }
+
 
 
 const styles = StyleSheet.create({

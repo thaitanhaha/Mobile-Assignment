@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import HeaderComponent from '@/components/HeaderComponent';
 import DeleteModal from '../../components/DeleteModal';
+import ErrorModal from '../../components/ErrorModal';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import WarningSVG from '../../assets/icons/warning.svg';
 import EditSVG from '../../assets/icons/edit.svg';
@@ -30,6 +31,7 @@ const notifications: Notification[] = [
 
 export default function NotificationsScreen() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [notificationToDelete, setNotificationToDelete] = useState<Notification | null>(null);
 
   const handleDeletePress = (notification: Notification) => {
@@ -39,8 +41,11 @@ export default function NotificationsScreen() {
 
   const handleConfirmDelete = () => {
     if (notificationToDelete) {
-      console.log(`Notification with id ${notificationToDelete.id} deleted`);
       setModalVisible(false);
+      setErrorModalVisible(true);
+      setTimeout(() => {
+        setErrorModalVisible(false);
+      }, 1000);
     }
   };
 
@@ -104,6 +109,11 @@ export default function NotificationsScreen() {
         notificationToDelete={notificationToDelete}
         onConfirmDelete={handleConfirmDelete}
         onCancelDelete={handleCancelDelete}
+      />
+      <ErrorModal
+        visible={errorModalVisible}
+        message="Feature will be updated soon!"
+        onClose={() => setErrorModalVisible(false)}
       />
     </View>
   );

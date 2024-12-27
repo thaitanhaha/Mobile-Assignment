@@ -7,7 +7,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import TotalSavingSVG from '../../assets/icons/total_saving.svg';
 import PlusSVG from '../../assets/icons/plus.svg';
 import axios from 'axios';
-import * as Sentry from "@sentry/react-native";
 
 type Entry = {
   _id: string;
@@ -21,6 +20,10 @@ export default function HomeScreen() {
   const [selectedTab, setSelectedTab] = useState('Entries');
   const [showCards, setShowCards] = useState(true);
   const [entries, setEntries] = useState<Entry[]>([]);
+
+  const handleDeleteEntry = (entryId: string) => {
+    setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== entryId));
+  };
   
   const getEntries = async () => {
     try {
@@ -38,10 +41,7 @@ export default function HomeScreen() {
         const temp = [...budgetsResponse.data, ...modifiedEntries];
         console.log(temp);
         setEntries(temp);
-
-        Sentry.captureMessage("Expenses and Budgets fetched successfully");
     } catch (err) {
-        Sentry.captureException(err);
         console.log(err);
     }
   };
@@ -68,7 +68,8 @@ export default function HomeScreen() {
   };
 
   let CurrentTabComponent = null;
-  if (selectedTab === 'Entries') CurrentTabComponent = <EntriesTab entries={entries} />;
+  if (selectedTab === 'Entries') CurrentTabComponent = 
+    <EntriesTab entries={entries} showDelete={!showCards} onDeleteEntry={handleDeleteEntry} />;
   if (selectedTab === 'Charts') CurrentTabComponent = <ChartsTab data={chartData} />;
 
   return (

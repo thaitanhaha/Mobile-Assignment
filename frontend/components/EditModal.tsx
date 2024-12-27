@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, Modal, TouchableHighlight, StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-type DeleteModalProps = {
+type EditModalProps = {
   visible: boolean;
-  notificationToDelete: any;
-  onConfirmDelete: () => void;
-  onCancelDelete: () => void;
+  thingToEdit: any;
+  onConfirmEdit: () => void;
+  onCancelEdit: () => void;
 };
 
-const DeleteModal = ({
+const EditModal = ({
   visible,
-  notificationToDelete,
-  onConfirmDelete,
-  onCancelDelete,
-}: DeleteModalProps) => {
+  thingToEdit,
+  onConfirmEdit,
+  onCancelEdit,
+}: EditModalProps) => {
 
   const handleConfirmDelete = () => {
-    onConfirmDelete();
+    onConfirmEdit();
   };
 
   return (
@@ -26,21 +26,21 @@ const DeleteModal = ({
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={onCancelDelete}
+        onRequestClose={onCancelEdit}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Confirm Deletion</Text>
+            <Text style={styles.modalTitle}>Confirm</Text>
             <Text style={styles.modalMessage}>
-              Are you sure you want to delete{' '}
-              <Text style={{ fontWeight: 'bold' }}>{notificationToDelete?.header}</Text>?
+              Are you sure you want to edit{' '}
+              <Text style={{ fontWeight: 'bold' }}>{thingToEdit?.header}</Text>?
             </Text>
             <View style={styles.modalButtons}>
-              <TouchableHighlight style={styles.modalButton} onPress={onCancelDelete}>
+              <TouchableHighlight style={styles.modalButton} onPress={onCancelEdit}>
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableHighlight>
               <TouchableHighlight style={styles.modalButtonYes} onPress={handleConfirmDelete}>
-                <Text style={styles.modalButtonText}>Delete</Text>
+                <Text style={styles.modalButtonText}>Edit</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeleteModal;
+export default EditModal;

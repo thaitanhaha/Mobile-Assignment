@@ -8,20 +8,48 @@ import MomoSVG from '../../assets/icons/Momo.svg';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import axios from 'axios';
-import * as Sentry from "@sentry/react-native";
+import DeleteSVG from "../../assets/icons/delete.svg";
+import DeleteModal from "../../components/DeleteModal";
+import ErrorModal from "../../components/ErrorModal";
+import SuccessModal from "../../components/SuccessModal";
+import useModalManager from "../../hooks/useModalManager";
 
 export default function WalletsScreen() {
-  const [goals, setGoals] = useState([]); 
+  const [goals, setGoals] = useState([]);
+  const {
+    modalVisible,
+    successModalVisible,
+    errorModalVisible,
+    thingToDelete,
+    handleDeletePress,
+    handleConfirmDelete,
+    handleCancelDelete,
+    handleSuccess,
+    handleError,
+    setModalVisible,
+    setSuccessModalVisible,
+    setErrorModalVisible,
+    setThingToDelete,
+  } = useModalManager();
 
   const getGoals = async () => {
     try {
         const goalsResponse = await axios.get('https://mobile-assignment.onrender.com/mgs');
         console.log(goalsResponse.data);
         setGoals(goalsResponse.data);
-        Sentry.captureMessage("Goals fetched successfully");
     } catch (err) {
-        Sentry.captureException(err);
         console.log(err);
+    }
+  };
+
+  const deleteGoal = async (goalId) => {
+    try {
+      await axios.delete(`https://mobile-assignment.onrender.com/mgs/${goalId}`);
+      setGoals(goals.filter((goal) => goal._id !== goalId));
+      handleSuccess();
+    } catch (err) {
+      console.log(err);
+      handleError();
     }
   };
 
@@ -69,7 +97,7 @@ export default function WalletsScreen() {
         <Text style={styles.sectionTitle}>Margin/Goals</Text>
         <ScrollView style={{ paddingVertical: 8 }}>
           {goals.map((goal) => (
-            <View key={goal.id} style={styles.inputContainer}>
+            <View key={goal._id} style={styles.inputContainer}>
               <Image source={require('../../assets/images/favicon.png')} style={styles.icon} />
               <View style={styles.rightContainer}>
                 <View style={styles.walletRow}>
@@ -78,9 +106,12 @@ export default function WalletsScreen() {
                     <ProgressBar progress={0.8} color="#4CAF50" style={styles.progressBar} />
                     <View style={styles.goalDetail}>
                       <Text style={styles.goalPercent}>80%</Text>
-                      <Text style={styles.goalPercent}>$100 left</Text>
+                      <Text style={styles.goalPercent}>{goal.totalAmount} USD</Text>
                     </View>
                   </View>
+                  <TouchableOpacity style={styles.arrowButton} onPress={() => handleDeletePress(goal._id)} >
+                    <DeleteSVG style={{ width: 20, height: 20 }} />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -89,6 +120,22 @@ export default function WalletsScreen() {
 
       </ScrollView>
     </View>
+    <DeleteModal
+      visible={modalVisible}
+      notificationToDelete={thingToDelete}
+      onConfirmDelete={() => handleConfirmDelete(deleteGoal)}
+      onCancelDelete={handleCancelDelete}
+    />
+    <ErrorModal
+      visible={errorModalVisible}
+      message="Error!"
+      onClose={() => setErrorModalVisible(false)}
+    />
+    <SuccessModal
+      visible={successModalVisible}
+      message="Success!"
+      onClose={() => setSuccessModalVisible(false)}
+    />
    </GestureHandlerRootView>
   );
 }

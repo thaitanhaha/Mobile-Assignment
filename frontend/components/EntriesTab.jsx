@@ -1,13 +1,67 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import ExpenseSVG from '../assets/icons/expense.svg';
 import BudgetSVG from '../assets/icons/budget.svg';
+import DeleteSVG from '../assets/icons/delete.svg';
+import DeleteModal from "../components/DeleteModal";
+import ErrorModal from "../components/ErrorModal";
+import SuccessModal from "../components/SuccessModal";
+import useModalManager from "../hooks/useModalManager";
+import axios from 'axios';
 
-function EntriesTab({ entries }) {
+function EntriesTab({ entries, showDelete, onDeleteEntry }) {
+  const [isBudget, setIsBudget] = useState(false);
+  const {
+    modalVisible,
+    successModalVisible,
+    errorModalVisible,
+    thingToDelete,
+    handleDeletePress,
+    handleConfirmDelete,
+    handleCancelDelete,
+    handleSuccess,
+    handleError,
+    setModalVisible,
+    setSuccessModalVisible,
+    setErrorModalVisible,
+    setThingToDelete,
+  } = useModalManager();
+
+  const deleteEntry = async (entryId) => {
+    try {
+      if (isBudget) {
+        await axios.delete(`https://mobile-assignment.onrender.com/budgets/${entryId}`);
+      } else {
+        await axios.delete(`https://mobile-assignment.onrender.com/expenses/${entryId}`);
+      }
+      onDeleteEntry(entryId);
+      handleSuccess();
+    } catch (err) {
+      console.log(err);
+      handleError();
+    }
+  };
+
   return (
     <ScrollView style={{ paddingVertical: 8 }}>
+      <DeleteModal
+        visible={modalVisible}
+        notificationToDelete={thingToDelete}
+        onConfirmDelete={() => handleConfirmDelete(deleteEntry)}
+        onCancelDelete={handleCancelDelete}
+      />
+      <ErrorModal
+        visible={errorModalVisible}
+        message="Error!"
+        onClose={() => setErrorModalVisible(false)}
+      />
+      <SuccessModal
+        visible={successModalVisible}
+        message="Success!"
+        onClose={() => setSuccessModalVisible(false)}
+      />
       {entries.map((entry) => (
-        <View key={entry.id} style={styles.inputContainer}>
+        <View key={entry._id} style={styles.inputContainer}>
           {entry.totalAmount > 0 ? (
             <BudgetSVG style={styles.icon} />
           ) : (
@@ -26,6 +80,16 @@ function EntriesTab({ entries }) {
               <Text>{entry.category} - {entry.date}</Text>
             </View>
           </View>
+          {showDelete == true && 
+          <TouchableOpacity style={styles.arrowButton} 
+            onPress={() => {
+              setIsBudget(entry.totalAmount > 0);
+              handleDeletePress(entry._id);
+            }} 
+          >
+            <DeleteSVG style={{ marginLeft: 8, marginRight: 8, width: 20, height: 20 }} />
+          </TouchableOpacity>
+          }
         </View>
       ))}
     </ScrollView>
